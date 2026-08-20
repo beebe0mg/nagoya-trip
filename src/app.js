@@ -62,6 +62,13 @@
   map.labels = ST_LABELS.filter(x => S[x[0]]).map(x => ({ ll: S[x[0]], t: x[0], k: 'st', c: x[1] }))
     .concat(AREAS.map(x => ({ ll: [x[1], x[2]], t: x[0], k: 'area' })));
 
+  const JP = {
+    '사카에': '栄駅 名古屋', '나고야': '名古屋駅', '야바초': '矢場町駅', '카미마에즈': '上前津駅',
+    '카나야마': '金山駅 名古屋', '나고야조': '名古屋城駅', '후시미': '伏見駅 名古屋', '카메지마': '亀島駅',
+    '히가시야마코엔': '東山公園駅', '산노': '山王駅 名鉄', '나고야코': '名古屋港駅', '이누야마': '犬山駅',
+    '오스 상점가': '大須商店街', '니시키 밤거리': '名古屋市中区錦三丁目', '나고야역 서쪽': '名古屋駅 太閤通口',
+    '히사야오도리': '久屋大通公園', '시라카와고 마을': '白川郷', '이누야마 성하마을': '犬山城下町'
+  };
   function setAttr(ok) {
     const osm = '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> 기여자';
     $('#attr').innerHTML = !ok ? ('OSM 데이터 내장 · © ' + osm)
@@ -119,7 +126,7 @@
       pinsEl.appendChild(b);
       pinData.push({ el: b, ll, i });
     });
-    if (mePin) { pinsEl.appendChild(mePin); }
+    if (mePin) pinsEl.appendChild(mePin);
     placePins();
     map.draw();
   }
@@ -404,6 +411,17 @@
     requestAnimationFrame(() => map.resize());
   }
 
+  /* 지도 위의 역·동네 점을 누르면 그 자리로 이동 */
+  map.onTap = (x, y) => {
+    const L = map.hitLabel(x, y);
+    if (!L) return;
+    map.setView(L.ll[0], L.ll[1], Math.max(map.z, L.k === 'st' ? 15.6 : 15));
+    placePins();
+    const q = (L.k === 'st' ? L.t + '역 나고야' : L.t);
+    const href = meLL ? gdir(meLL[0] + ',' + meLL[1], JP[L.t] || q, 'transit') : gmap(JP[L.t] || q);
+    sheet((L.k === 'st' ? '🚇 ' : '📍 ') + L.t, href, '닫기', () => { fsheet.hidden = true; }, L.ll);
+  };
+
   /* ---------- 컨트롤 ---------- */
   let fitAll = false;
   $('#btnFit').addEventListener('click', (e) => {
@@ -426,15 +444,13 @@
   const isFull = () => document.body.classList.contains('full');
   $('#btnFull').addEventListener('click', () => setFull(!isFull()));
   $('#fab').addEventListener('click', () => setFull(true));
-  $('#fsheetX').addEventListener('click', () => {
-    const si = stopIdx;
-    setFull(false);
-    if (si >= 0) scrollToStop(si);
-  });
+
   /* 지도가 화면에서 벗어나면 떠 있는 '지도' 버튼을 보여준다 */
   const fabSync = () => {
     const r = $('#mapwrap').getBoundingClientRect();
-    $('#fab').classList.toggle('show', !isFull() && dayIdx >= 0 && r.bottom < 64);
+    const away = r.bottom < 64;
+    $('#fab').classList.toggle('show', !isFull() && dayIdx >= 0 && away);
+    if (away && !isFull()) fsheet.hidden = true;
   };
   window.addEventListener('scroll', fabSync, { passive: true });
   window.addEventListener('resize', fabSync);
@@ -444,12 +460,31 @@
     const off = $('.hd').offsetHeight + $('#tabs').offsetHeight + 8;
     window.scrollTo({ top: Math.max(0, li.getBoundingClientRect().top + window.scrollY - off), behavior: 'smooth' });
   }
+  const M = (a, b) => {
+    const R = 6371000, d1 = (b[0] - a[0]) * Math.PI / 180, d2 = (b[1] - a[1]) * Math.PI / 180;
+    const x = Math.sin(d1 / 2) ** 2 + Math.cos(a[0] * Math.PI / 180) * Math.cos(b[0] * Math.PI / 180) * Math.sin(d2 / 2) ** 2;
+    return Math.round(2 * R * Math.asin(Math.sqrt(x)));
+  };
+  const dist = (ll) => {
+    if (!meLL || !ll) return '';
+    const m = M(meLL, ll);
+    return ' · 내 위치에서 ' + (m > 1200 ? (m / 1000).toFixed(1) + 'km' : m + 'm');
+  };
+  let sheetAct = null;
+  $('#fsheetX').addEventListener('click', () => { if (sheetAct) sheetAct(); });
+  function sheet(title, href, actLabel, act, ll) {
+    fsheet.hidden = false;
+    $('#fsheetT').textContent = title + dist(ll);
+    const g = $('#fsheetG');
+    if (href) { g.hidden = false; g.href = href; g.textContent = meLL ? '내 위치 → 길찾기 ↗' : '구글맵 ↗'; } else g.hidden = true;
+    $('#fsheetX').textContent = actLabel;
+    sheetAct = act;
+  }
   function showSheet(st) {
     if (!isFull()) { fsheet.hidden = true; return; }
-    fsheet.hidden = false;
-    $('#fsheetT').textContent = st.t + ' · ' + st.name;
-    const g = $('#fsheetG');
-    if (st.q) { g.hidden = false; g.href = gmap(st.q); } else g.hidden = true;
+    const ll = llOf(st);
+    const href = st.q ? (meLL ? gdir(meLL[0] + ',' + meLL[1], st.q, 'transit') : gmap(st.q)) : '';
+    sheet(st.t + ' · ' + st.name, href, '일정 보기', () => { const si = stopIdx; setFull(false); if (si >= 0) scrollToStop(si); }, ll);
   }
   $('#btnHide').addEventListener('click', (e) => {
     const w = $('#mapwrap');
@@ -469,24 +504,52 @@
     setAttr(map.tileMode);
     placePins();
   });
-  $('#btnGeo').addEventListener('click', (e) => {
-    if (!navigator.geolocation) { alert('이 브라우저에선 위치를 못 써.'); return; }
-    e.currentTarget.setAttribute('aria-pressed', 'true');
-    navigator.geolocation.getCurrentPosition((pos) => {
+  let geoWatch = null, geoFirst = true;
+  const baseMsg = () => { msgEl.hidden = map.tileMode; if (!map.tileMode) msgEl.innerHTML = '타일 서버를 못 불러와서 <b>내장 OSM 벡터 지도</b>로 그렸어 — 노선·물·공원은 실제 좌표야.'; };
+  const tellMsg = (t) => { msgEl.hidden = false; msgEl.innerHTML = t; };
+  function geoStop() {
+    if (geoWatch != null && navigator.geolocation) navigator.geolocation.clearWatch(geoWatch);
+    geoWatch = null; geoFirst = true; meLL = null; map.me = null;
+    if (mePin) { mePin.remove(); mePin = null; }
+    $('#btnGeo').setAttribute('aria-pressed', 'false');
+    $('#btnGeo').querySelector('.lbl').textContent = '내 위치';
+    baseMsg(); map.draw();
+  }
+  function geoStart() {
+    if (!navigator.geolocation) { tellMsg('이 브라우저에선 위치를 쓸 수 없어.'); return; }
+    $('#btnGeo').setAttribute('aria-pressed', 'true');
+    $('#btnGeo').querySelector('.lbl').textContent = '위치 ON';
+    tellMsg('내 위치 찾는 중…');
+    geoWatch = navigator.geolocation.watchPosition((pos) => {
       meLL = [pos.coords.latitude, pos.coords.longitude];
+      map.me = { ll: meLL, acc: pos.coords.accuracy || 0 };
       if (!mePin) {
         mePin = document.createElement('div');
         mePin.className = 'pin me';
         mePin.title = '내 위치';
       }
-      pinsEl.appendChild(mePin);
-      map.setView(meLL[0], meLL[1], Math.max(map.z, 15));
-      placePins();
-    }, () => {
-      alert('위치를 못 가져왔어. 브라우저 위치 권한을 확인해줘.');
-      e.currentTarget.setAttribute('aria-pressed', 'false');
-    }, { enableHighAccuracy: true, timeout: 8000 });
+      if (!mePin.parentNode) pinsEl.appendChild(mePin);
+      if (geoFirst) {
+        geoFirst = false;
+        map.setView(meLL[0], meLL[1], Math.max(map.z, 15.4));
+        baseMsg();
+      }
+      placePins(); map.draw();
+    }, (err) => {
+      const why = err && err.code === 1 ? '위치 권한이 거부됐어 — 설정에서 이 사이트의 위치 접근을 허용해줘.'
+        : err && err.code === 3 ? '위치를 찾는 데 시간이 너무 걸려. 실외에서 다시 눌러줘.'
+        : '위치를 못 가져왔어.';
+      tellMsg(why);
+      geoStop();
+    }, { enableHighAccuracy: true, timeout: 15000, maximumAge: 4000 });
+  }
+  const GEOKEY = 'nagoya-geo';
+  $('#btnGeo').addEventListener('click', () => {
+    if (geoWatch == null) { geoStart(); try { localStorage.setItem(GEOKEY, '1'); } catch (e) {} }
+    else { geoStop(); try { localStorage.removeItem(GEOKEY); } catch (e) {} }
   });
+  /* 한 번 켰으면 다음에 열 때 알아서 다시 켠다 (처음엔 권한 창을 띄우지 않음) */
+  try { if (localStorage.getItem(GEOKEY) === '1') setTimeout(geoStart, 600); } catch (e) {}
 
   /* ---------- 카운트다운 · 첫 화면 ---------- */
   (function boot() {

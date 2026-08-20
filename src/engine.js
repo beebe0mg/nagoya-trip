@@ -189,6 +189,7 @@ const MiniMap = (() => {
       }
       this.drawRoutes(t, s, ox, oy);
       if (this.style !== 'osm') this.drawLabels(t, s, ox, oy);
+      this.drawMe(t, s, ox, oy);
     }
     drawTiles(c, s, ox, oy) {
       const z = Math.max(0, Math.min(19, Math.round(this.z)));
@@ -278,6 +279,7 @@ const MiniMap = (() => {
       }
       t.textBaseline = 'middle'; t.textAlign = 'left';
       const halo = css('--card'), inkS = css('--ink-2'), inkA = css('--muted');
+      for (const L of this.labels) L._box = null;
       for (const L of this.labels) {
         if (L.k === 'st' && z < 12.4) continue;
         if (L.k === 'area' && (z < 11.8 || z > 16.4)) continue;
@@ -289,7 +291,7 @@ const MiniMap = (() => {
         const lx = L.k === 'st' ? X + 9 : X - w / 2;
         const bx = [lx - 3, Y - fs * 0.85, w + 6, fs * 1.7];
         if (boxes.some(b => bx[0] < b[0] + b[2] && b[0] < bx[0] + bx[2] && bx[1] < b[1] + b[3] && b[1] < bx[1] + bx[3])) continue;
-        boxes.push(bx);
+        boxes.push(bx); L._box = [Math.min(bx[0], X - 11), bx[1], bx[0] + bx[2] - Math.min(bx[0], X - 11), bx[3]];
         if (L.k === 'st') {
           t.beginPath(); t.arc(X, Y, 3.7, 0, 6.2832);
           t.fillStyle = halo; t.fill();
@@ -300,6 +302,33 @@ const MiniMap = (() => {
         t.fillStyle = L.k === 'area' ? inkA : inkS;
         t.fillText(L.t, lx, Y);
       }
+    }
+
+    /* ---------- 내 위치 정확도 원 ---------- */
+    drawMe(t, s, ox, oy) {
+      if (!this.me) return;
+      const X = px(this.me.ll[1]) * s - ox, Y = py(this.me.ll[0]) * s - oy;
+      const mpp = 156543.03392 * Math.cos(this.me.ll[0] * D2R) / Math.pow(2, this.z);
+      const r = Math.min(170, (this.me.acc || 0) / mpp);
+      if (r < 7) return;
+      t.beginPath(); t.arc(X, Y, r, 0, 6.2832);
+      t.fillStyle = 'rgba(46,123,224,.15)'; t.fill();
+      t.strokeStyle = 'rgba(46,123,224,.45)'; t.lineWidth = 1.5; t.stroke();
+    }
+    /* 라벨(역·동네) 탭 히트테스트 */
+    hitLabel(x, y) {
+      let best = null;
+      for (const L of this.labels || []) {
+        const b = L._box;
+        if (!b) continue;
+        const pad = 9;
+        if (x >= b[0] - pad && x <= b[0] + b[2] + pad && y >= b[1] - pad && y <= b[1] + b[3] + pad) {
+          const cx = b[0] + b[2] / 2, cy = b[1] + b[3] / 2;
+          const d = Math.hypot(cx - x, cy - y);
+          if (!best || d < best.d) best = { L, d };
+        }
+      }
+      return best && best.L;
     }
 
     /* ---------- 입력 ---------- */
@@ -333,11 +362,15 @@ const MiniMap = (() => {
         if (this.pointers.size < 2) this.pinchStart = null;
         if (p && Date.now() - p.t < 300 && Math.hypot(e.clientX - p.x0, e.clientY - p.y0) < 6) {
           const now = Date.now();
+          const r = box.getBoundingClientRect();
+          const lx = e.clientX - r.left, ly = e.clientY - r.top;
           if (this._lastTap && now - this._lastTap < 320) {
-            const r = box.getBoundingClientRect();
-            this.zoomTo(this.z + 1, e.clientX - r.left, e.clientY - r.top);
+            this.zoomTo(this.z + 1, lx, ly);
             this._lastTap = 0;
-          } else this._lastTap = now;
+          } else {
+            this._lastTap = now;
+            if (this.onTap) this.onTap(lx, ly);
+          }
         }
       };
       box.addEventListener('pointerup', up);
