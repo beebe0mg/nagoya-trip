@@ -37,6 +37,8 @@ const MiniMap = (() => {
       this.lat = 35.168; this.lng = 136.906; this.z = 13;
       this.minZ = 5; this.maxZ = 18;
       this.tiles = new Map(); this.tileMode = false; this.probed = false;
+      this.style = opts.style || 'clean';   /* clean = 라벨 없는 CARTO, osm = 일본어 상세 */
+      this.labels = [];
       this.overlay = []; this.onView = opts.onView || (() => {});
       this.onTileState = opts.onTileState || (() => {});
       this.base = this.prep(basemap);
@@ -120,12 +122,29 @@ const MiniMap = (() => {
       this.draw(); this.onView();
     }
     /* ---------- 타일 ---------- */
+    isDark() {
+      const t = document.documentElement.dataset.theme;
+      if (t === 'dark') return true;
+      if (t === 'light') return false;
+      return !!(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+    }
+    tileURL(z, x, y) {
+      if (this.style === 'osm') return 'https://tile.openstreetmap.org/' + z + '/' + x + '/' + y + '.png';
+      const r = (window.devicePixelRatio || 1) > 1.4 ? '@2x' : '';
+      const sub = 'abcd'[(x + y) % 4];
+      return 'https://' + sub + '.basemaps.cartocdn.com/' + (this.isDark() ? 'dark' : 'light') +
+        '_nolabels/' + z + '/' + x + '/' + y + r + '.png';
+    }
+    setStyle(s) {
+      if (s === this.style) return;
+      this.style = s; this.tiles.clear(); this.draw();
+    }
     probe() {
       const img = new Image();
       img.crossOrigin = 'anonymous';
       img.onload = () => { this.tileMode = true; this.probed = true; this.onTileState(true); this.draw(); };
       img.onerror = () => { this.tileMode = false; this.probed = true; this.onTileState(false); this.draw(); };
-      img.src = 'https://tile.openstreetmap.org/13/7186/3234.png';
+      img.src = this.tileURL(13, 7186, 3234);
     }
     tile(z, x, y) {
       const n = 1 << z;
@@ -138,7 +157,7 @@ const MiniMap = (() => {
         t.img.crossOrigin = 'anonymous';
         t.img.onload = () => { t.ok = true; this.schedule(); };
         t.img.onerror = () => { t.err = true; };
-        t.img.src = 'https://tile.openstreetmap.org/' + k + '.png';
+        t.img.src = this.tileURL(z, x, y);
         this.tiles.set(k, t);
         if (this.tiles.size > 420) { const it = this.tiles.keys(); for (let i = 0; i < 120; i++) this.tiles.delete(it.next().value); }
       }
@@ -163,6 +182,7 @@ const MiniMap = (() => {
         t.clearRect(0, 0, this.w, this.h);
       }
       this.drawRoutes(t, s, ox, oy);
+      if (this.style !== 'osm') this.drawLabels(t, s, ox, oy);
     }
     drawTiles(c, s, ox, oy) {
       const z = Math.max(0, Math.min(19, Math.round(this.z)));
@@ -241,6 +261,41 @@ const MiniMap = (() => {
         }
       }
     }
+    /* ---------- 한글 라벨 (역·동네) ---------- */
+    drawLabels(t, s, ox, oy) {
+      const z = this.z, boxes = [];
+      if (!this.labels || !this.labels.length) return;
+      /* 핀이 앉은 자리는 라벨을 비켜준다 */
+      for (const a of (this.avoid || [])) {
+        const X = px(a[1]) * s - ox, Y = py(a[0]) * s - oy, r = a[2] || 16;
+        boxes.push([X - r, Y - r, r * 2, r * 2]);
+      }
+      t.textBaseline = 'middle'; t.textAlign = 'left';
+      const halo = css('--card'), inkS = css('--ink-2'), inkA = css('--muted');
+      for (const L of this.labels) {
+        if (L.k === 'st' && z < 12.4) continue;
+        if (L.k === 'area' && (z < 11.8 || z > 16.4)) continue;
+        const X = px(L.ll[1]) * s - ox, Y = py(L.ll[0]) * s - oy;
+        if (X < -70 || X > this.w + 70 || Y < 14 || Y > this.h - 16) continue;
+        const fs = L.k === 'area' ? 12.5 : 11.5;
+        t.font = (L.k === 'area' ? '500 ' : '600 ') + fs + 'px "IBM Plex Sans KR", system-ui, sans-serif';
+        const w = t.measureText(L.t).width;
+        const lx = L.k === 'st' ? X + 9 : X - w / 2;
+        const bx = [lx - 3, Y - fs * 0.85, w + 6, fs * 1.7];
+        if (boxes.some(b => bx[0] < b[0] + b[2] && b[0] < bx[0] + bx[2] && bx[1] < b[1] + b[3] && b[1] < bx[1] + bx[3])) continue;
+        boxes.push(bx);
+        if (L.k === 'st') {
+          t.beginPath(); t.arc(X, Y, 3.7, 0, 6.2832);
+          t.fillStyle = halo; t.fill();
+          t.lineWidth = 2.4; t.strokeStyle = css(L.c || '--rule-2'); t.stroke();
+        }
+        t.lineWidth = 3.8; t.strokeStyle = halo; t.globalAlpha = 0.9;
+        t.strokeText(L.t, lx, Y); t.globalAlpha = 1;
+        t.fillStyle = L.k === 'area' ? inkA : inkS;
+        t.fillText(L.t, lx, Y);
+      }
+    }
+
     /* ---------- 입력 ---------- */
     bind() {
       const box = this.box;
@@ -287,10 +342,15 @@ const MiniMap = (() => {
         this.zoomTo(this.z - Math.sign(e.deltaY) * (e.ctrlKey ? 0.5 : 0.36), e.clientX - r.left, e.clientY - r.top);
       }, { passive: false });
       window.addEventListener('resize', () => this.resize());
+      const themed = () => { this.tiles.clear(); this.draw(); };
       if (window.matchMedia) {
         const mq = window.matchMedia('(prefers-color-scheme: dark)');
-        mq.addEventListener && mq.addEventListener('change', () => this.draw());
+        mq.addEventListener && mq.addEventListener('change', themed);
       }
+      if (window.MutationObserver) {
+        new MutationObserver(themed).observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+      }
+      if (document.fonts && document.fonts.ready) document.fonts.ready.then(() => this.draw());
     }
 
     /* 두 지점 사이를 실제 노선 위로 잇기: 단일 노선 → 허브 2단 → 자동 분기점 합성 */

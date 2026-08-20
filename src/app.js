@@ -38,15 +38,36 @@
     onView: () => placePins(),
     onTileState: (ok) => {
       mapbox.classList.toggle('tiles', ok);
+      mapbox.classList.toggle('osmtiles', map.style === 'osm');
       msgEl.hidden = ok;
       if (!ok) msgEl.innerHTML = '타일 서버를 못 불러와서 <b>내장 OSM 벡터 지도</b>로 그렸어 — 노선·물·공원은 실제 좌표야.';
-      $('#attr').innerHTML = ok
-        ? '지도 © <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> 기여자'
-        : 'OSM 데이터 내장 · © OpenStreetMap 기여자';
+      setAttr(ok);
     }
   });
 
   let dayIdx = 0, stopIdx = -1, mePin = null, meLL = null;
+
+  /* ---------- 한글 라벨: 우리가 쓰는 역 + 동네 ---------- */
+  const ST_LABELS = [
+    ['사카에', '--purple-line'], ['나고야', '--yellow-line'], ['야바초', '--purple-line'],
+    ['카미마에즈', '--purple-line'], ['카나야마', '--purple-line'], ['나고야조', '--purple-line'],
+    ['후시미', '--yellow-line'], ['카메지마', '--yellow-line'], ['히가시야마코엔', '--yellow-line'],
+    ['산노', '--red-line'], ['나고야코', '--purple-line'], ['이누야마', '--red-line']
+  ];
+  const AREAS = [
+    ['오스 상점가', 35.1588, 136.9008], ['니시키 밤거리', 35.1716, 136.9048],
+    ['나고야역 서쪽', 35.1700, 136.8785], ['히사야오도리', 35.1745, 136.9088],
+    ['시라카와고 마을', 36.2585, 136.9048], ['이누야마 성하마을', 35.3856, 136.9412]
+  ];
+  map.labels = ST_LABELS.filter(x => S[x[0]]).map(x => ({ ll: S[x[0]], t: x[0], k: 'st', c: x[1] }))
+    .concat(AREAS.map(x => ({ ll: [x[1], x[2]], t: x[0], k: 'area' })));
+
+  function setAttr(ok) {
+    const osm = '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> 기여자';
+    $('#attr').innerHTML = !ok ? ('OSM 데이터 내장 · © ' + osm)
+      : map.style === 'osm' ? ('지도 © ' + osm)
+      : ('지도 © ' + osm + ' · 타일 © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>');
+  }
 
   /* ---------- 하루 동선 → 지도 선 ---------- */
   function dayOverlay(day) {
@@ -89,12 +110,18 @@
       b.className = 'pin' + (st.home ? ' home' : '') + (st.opt ? ' opt' : '');
       b.textContent = String(i + 1);
       b.setAttribute('aria-label', (i + 1) + '. ' + st.name);
-      b.addEventListener('click', (e) => { e.stopPropagation(); selectStop(i, true); });
+      b.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const me = pinData.find(p => p.el === b);
+        if (me && me.gz) { map.zoomTo(map.z + 1.7, me.gz[0], me.gz[1]); placePins(); return; }
+        selectStop(i, true);
+      });
       pinsEl.appendChild(b);
       pinData.push({ el: b, ll, i });
     });
     if (mePin) { pinsEl.appendChild(mePin); }
     placePins();
+    map.draw();
   }
   function subPins(st) {
     if (!st || !st.subs) return;
@@ -113,25 +140,44 @@
     });
   }
   function placePins() {
-    const pad = 6, placed = [];
+    const pad = 6;
+    map.avoid = pinData.map(p => [p.ll[0], p.ll[1], p.sub ? 10 : 17]);
+    /* 1) 화면 좌표 계산 + 화면 밖 숨김 */
+    const vis = [];
     for (const p of pinData) {
       const xy = map.project(p.ll[0], p.ll[1]);
-      const vis = xy[0] > -pad && xy[0] < map.w + pad && xy[1] > -pad && xy[1] < map.h + pad;
-      p.el.style.display = vis ? '' : 'none';
-      if (!vis) continue;
-      /* 겹치는 핀은 살짝 밀어서 번호가 다 보이게 */
-      let x = xy[0], y = xy[1], step = 0;
-      const R = p.sub ? 14 : 23;
-      while (step < 12 && placed.some(q => Math.hypot(q[0] - x, q[1] - y) < Math.min(R, q[2]))) {
-        const ang = (step % 6) * 60 * Math.PI / 180 + (p.sub ? 0.5 : 0);
-        const rad = R * (0.82 + Math.floor(step / 6) * 0.7);
-        x = xy[0] + Math.cos(ang) * rad; y = xy[1] + Math.sin(ang) * rad;
-        step++;
+      const on = xy[0] > -pad && xy[0] < map.w + pad && xy[1] > -pad && xy[1] < map.h + pad;
+      p.el.style.display = on ? '' : 'none';
+      p.el.classList.remove('grouped');
+      p.el.removeAttribute('data-more');
+      p.gz = null;
+      if (on) { p.x = xy[0]; p.y = xy[1]; vis.push(p); }
+    }
+    /* 2) 가까운 핀은 하나로 묶어서 보여준다 (탭하면 확대) */
+    const groups = [];
+    for (const p of vis) {
+      const near = groups.find(g => Math.hypot(g.x - p.x, g.y - p.y) < (p.sub || g.sub ? 15 : 27));
+      if (near) { near.m.push(p); near.sub = near.sub && p.sub; }
+      else groups.push({ x: p.x, y: p.y, m: [p], sub: !!p.sub });
+    }
+    /* 3) 대표 핀만 남기고, 겹친 서브 핀은 살짝 밀어서 표시 */
+    for (const g of groups) {
+      const sel = g.m.find(p => !p.sub && p.i === stopIdx);
+      const rep = sel || g.m.find(p => !p.sub) || g.m[0];
+      const rest = g.m.filter(p => p !== rep);
+      rep.el.style.left = g.x + 'px'; rep.el.style.top = g.y + 'px';
+      const hidden = rest.filter(p => !p.sub).length;
+      if (hidden > 0) {
+        rep.el.classList.add('grouped');
+        rep.el.setAttribute('data-more', '+' + hidden);
+        rep.gz = [g.x, g.y];
+        rep.el.setAttribute('aria-label', '이 자리에 ' + g.m.length + '곳 — 눌러서 확대');
       }
-      placed.push([x, y, R]);
-      p.el.style.left = x + 'px';
-      p.el.style.top = y + 'px';
-      p.el.classList.toggle('nudged', step > 0);
+      for (const p of rest) {
+        if (p.sub) { /* 서브 핀은 작으니 6px만 밀어서 남겨둔다 */
+          p.el.style.left = (g.x + 9) + 'px'; p.el.style.top = (g.y + 9) + 'px';
+        } else p.el.style.display = 'none';
+      }
     }
     if (mePin && meLL) {
       const xy = map.project(meLL[0], meLL[1]);
@@ -369,6 +415,16 @@
     e.currentTarget.querySelector('.lbl').textContent = hid ? '지도' : '접기';
     e.currentTarget.firstChild.textContent = hid ? '▸' : '▾';
     if (!hid) requestAnimationFrame(() => { map.resize(); placePins(); });
+  });
+  $('#btnStyle').addEventListener('click', (e) => {
+    const to = map.style === 'clean' ? 'osm' : 'clean';
+    map.setStyle(to);
+    mapbox.classList.toggle('osmtiles', to === 'osm');
+    e.currentTarget.setAttribute('aria-pressed', to === 'osm' ? 'true' : 'false');
+    e.currentTarget.querySelector('.lbl').textContent = to === 'osm' ? '깔끔' : '상세';
+    e.currentTarget.firstChild.textContent = to === 'osm' ? '🇯🇵' : '🗺';
+    setAttr(map.tileMode);
+    placePins();
   });
   $('#btnGeo').addEventListener('click', (e) => {
     if (!navigator.geolocation) { alert('이 브라우저에선 위치를 못 써.'); return; }

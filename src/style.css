@@ -22,8 +22,7 @@
   --hd-h:52px; --tab-h:52px;
 }
 @media (prefers-color-scheme: dark){
-  :root:not([data-theme="light"]) .mapbox.tiles{--tile-dark:1}
-  :root:not([data-theme="light"]) .mapbox.tiles #cv{filter:invert(1) hue-rotate(180deg) brightness(.88) contrast(1.04) saturate(.8)}
+  :root:not([data-theme="light"]) .mapbox.tiles.osmtiles #cv{filter:invert(1) hue-rotate(180deg) brightness(.88) contrast(1.04) saturate(.8)}
   :root:not([data-theme="light"]){
     --paper:#0C0E14; --card:#151822; --card-2:#1B1F2A; --sheet:#151822;
     --ink:#ECEEF4; --ink-2:#C2C7D6; --muted:#939AAC;
@@ -43,7 +42,7 @@
     --shadow:0 1px 2px rgba(0,0,0,.5), 0 14px 34px -20px rgba(0,0,0,.9);
   }
 }
-:root[data-theme="dark"] .mapbox.tiles #cv{filter:invert(1) hue-rotate(180deg) brightness(.88) contrast(1.04) saturate(.8)}
+:root[data-theme="dark"] .mapbox.tiles.osmtiles #cv{filter:invert(1) hue-rotate(180deg) brightness(.88) contrast(1.04) saturate(.8)}
 :root[data-theme="dark"]{
   --paper:#0C0E14; --card:#151822; --card-2:#1B1F2A; --sheet:#151822;
   --ink:#ECEEF4; --ink-2:#C2C7D6; --muted:#939AAC;
@@ -129,7 +128,7 @@ h1{margin:0; font-size:16.5px; font-weight:700; letter-spacing:-.03em; white-spa
 .mapbox{position:relative; height:clamp(196px,34vh,380px); background:var(--map-land); overflow:hidden; touch-action:none}
 .mapbox canvas{position:absolute; inset:0; display:block; width:100%; height:100%}
 #cvTop{pointer-events:none}
-.tile-dark #cv{filter:invert(1) hue-rotate(180deg) brightness(.88) contrast(1.04) saturate(.82)}
+
 .pins{position:absolute; inset:0; pointer-events:none}
 .pin{
   position:absolute; transform:translate(-50%,-50%); pointer-events:auto;
@@ -141,7 +140,12 @@ h1{margin:0; font-size:16.5px; font-weight:700; letter-spacing:-.03em; white-spa
 .pin.opt{background:var(--map-land); color:var(--ink); border:2.5px dashed var(--pin)}
 .pin.sel{outline:3.5px solid var(--pin); outline-offset:2.5px; z-index:5}
 .pin.sub{width:15px; height:15px; font-size:0; background:var(--card); border:3.5px solid var(--ink-2); box-shadow:0 1px 3px rgba(0,0,0,.25)}
-.pin.nudged{box-shadow:0 0 0 1.5px var(--card), 0 2px 7px rgba(0,0,0,.34)}
+.pin.grouped::after{
+  content:attr(data-more); position:absolute; top:-7px; right:-11px;
+  font-family:var(--f-mono); font-size:9.5px; font-weight:600; line-height:1.5;
+  background:var(--card); color:var(--ink-2); border:1.5px solid var(--rule-2);
+  border-radius:7px; padding:0 4px; box-shadow:0 1px 3px rgba(0,0,0,.2);
+}
 .pin.me{width:16px; height:16px; background:#2E7BE0; border:3px solid #fff; box-shadow:0 0 0 6px rgba(46,123,224,.22); cursor:default}
 .zoomers{position:absolute; right:9px; top:9px; display:flex; flex-direction:column; gap:5px}
 .zb{
