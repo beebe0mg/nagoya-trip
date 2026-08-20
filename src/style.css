@@ -75,11 +75,15 @@ body{
 a{color:inherit}
 button{font:inherit; color:inherit}
 :focus-visible{outline:2.5px solid var(--ink); outline-offset:2px; border-radius:8px}
-.app{max-width:1320px; margin:0 auto; padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+.app{
+  max-width:1320px; margin:0 auto;
+  padding-bottom:calc(40px + env(safe-area-inset-bottom));
+  padding-left:env(safe-area-inset-left); padding-right:env(safe-area-inset-right);
+}
 
 /* ===== header ===== */
 .hd{position:sticky; top:0; z-index:40; background:var(--paper); border-bottom:1px solid var(--rule)}
-.hd-in{display:flex; align-items:center; gap:10px; padding:9px 14px; min-height:var(--hd-h)}
+.hd-in{display:flex; align-items:center; gap:10px; padding:calc(9px + env(safe-area-inset-top)) 14px 9px; min-height:var(--hd-h)}
 .leaf{font-size:20px; line-height:1}
 .hd-t{min-width:0; flex:1}
 h1{margin:0; font-size:16.5px; font-weight:700; letter-spacing:-.03em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
@@ -112,7 +116,7 @@ h1{margin:0; font-size:16.5px; font-weight:700; letter-spacing:-.03em; white-spa
 
 /* ===== map ===== */
 .mapwrap{
-  position:sticky; top:calc(var(--hd-h) + var(--tab-h)); z-index:30;
+  position:relative; z-index:1;
   background:var(--card); border-bottom:1px solid var(--rule);
 }
 .mapbar{display:flex; align-items:center; gap:8px; padding:8px 12px 8px 14px; border-bottom:1px solid var(--rule); background:var(--card-2)}
@@ -125,7 +129,7 @@ h1{margin:0; font-size:16.5px; font-weight:700; letter-spacing:-.03em; white-spa
 .mb .lbl{display:none}
 .mb:hover{border-color:var(--ink-2)}
 .mb[aria-pressed="true"]{background:var(--ink); color:var(--paper); border-color:var(--ink)}
-.mapbox{position:relative; height:clamp(196px,34vh,380px); background:var(--map-land); overflow:hidden; touch-action:none}
+.mapbox{position:relative; height:clamp(230px,44dvh,460px); background:var(--map-land); overflow:hidden; touch-action:none}
 .mapbox canvas{position:absolute; inset:0; display:block; width:100%; height:100%}
 #cvTop{pointer-events:none}
 
@@ -162,7 +166,7 @@ h1{margin:0; font-size:16.5px; font-weight:700; letter-spacing:-.03em; white-spa
   background:color-mix(in srgb, var(--card) 88%, transparent); border:1px solid var(--rule);
   padding:5px 8px; border-radius:8px; line-height:1.4;
 }
-.legend{display:flex; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; gap:5px 13px; padding:7px 14px 8px; background:var(--card-2); border-top:1px solid var(--rule)}
+.legend{display:flex; flex-wrap:wrap; gap:5px 13px; padding:7px 14px 8px; background:var(--card-2); border-top:1px solid var(--rule)}
 .legend::-webkit-scrollbar{display:none}
 .lg{flex:0 0 auto; display:flex; align-items:center; gap:5px; white-space:nowrap; font-family:var(--f-mono); font-size:10.5px; color:var(--ink-2)}
 .lg i{display:block; width:19px; height:3.5px; border-radius:2px; background:currentColor}
@@ -171,10 +175,15 @@ h1{margin:0; font-size:16.5px; font-weight:700; letter-spacing:-.03em; white-spa
 .lg.l-w i{height:0; border-top:3.5px dashed var(--walk); border-radius:0}
 .lg.l-h i{width:12px; height:12px; border-radius:4px}
 .mapwrap.hid .mapbox, .mapwrap.hid .legend{display:none}
-body.full .mapwrap{position:fixed; inset:0; z-index:80; border:0; display:flex; flex-direction:column}
+body.full .mapwrap{
+  position:fixed; inset:0; z-index:80; border:0; display:flex; flex-direction:column;
+  padding-top:env(safe-area-inset-top); padding-bottom:env(safe-area-inset-bottom);
+  background:var(--card);
+}
 body.full .mapbox{flex:1 1 auto; height:auto; max-height:none}
 body.full{overflow:hidden}
 body.full .mb#btnFull{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+body.full .legend{display:none}
 
 /* ===== day body ===== */
 main{padding:14px 14px 0; display:flex; flex-direction:column; gap:13px}
@@ -312,6 +321,29 @@ ul.check .bx{flex:0 0 auto; width:20px; height:20px; border-radius:6px; border:2
 ul.check li.done .bx{background:var(--ink); border-color:var(--ink); color:var(--paper)}
 ul.check li.done{color:var(--muted)}
 
+.fab{
+  position:fixed; right:14px; bottom:calc(16px + env(safe-area-inset-bottom)); z-index:50;
+  display:none; align-items:center; gap:7px; padding:11px 15px; min-height:46px;
+  background:var(--ink); color:var(--paper); border:0; border-radius:999px;
+  font-size:14px; font-weight:600; letter-spacing:-.02em; cursor:pointer;
+  box-shadow:0 4px 16px rgba(16,18,28,.28);
+}
+.fab.show{display:inline-flex}
+body.full .fab{display:none !important}
+.fsheet{
+  position:fixed; left:12px; right:12px; bottom:calc(12px + env(safe-area-inset-bottom)); z-index:90;
+  display:flex; flex-direction:column; gap:9px;
+  background:var(--card); border:1.5px solid var(--rule-2); border-radius:14px;
+  padding:12px 14px; box-shadow:0 10px 30px rgba(0,0,0,.34);
+}
+.fsheet .fs-t{font-size:15px; font-weight:600; letter-spacing:-.02em; line-height:1.4}
+.fsheet .fs-b{display:flex; gap:8px}
+.fsheet .fs-g, .fsheet .fs-x{
+  flex:1 1 0; display:inline-flex; align-items:center; justify-content:center; min-height:42px;
+  border-radius:10px; font-size:13.5px; font-weight:600; text-decoration:none; cursor:pointer;
+}
+.fsheet .fs-g{background:transparent; color:var(--ink); border:1.5px solid var(--rule-2)}
+.fsheet .fs-x{background:var(--ink); color:var(--paper); border:0}
 .ft{margin:26px 14px 0; padding-top:16px; border-top:1px solid var(--rule); display:flex; flex-direction:column; gap:5px; font-size:11.5px; color:var(--muted)}
 
 /* mobile stacked tables */
@@ -331,6 +363,7 @@ ul.check li.done{color:var(--muted)}
 /* ===== desktop ===== */
 @media (min-width:1000px){
   :root{--hd-h:60px}
+  .fab, .fsheet{display:none !important}
   .hd-in{padding:12px 22px}
   h1{font-size:21px}
   .hd-s{font-size:12.5px}
@@ -340,7 +373,7 @@ ul.check li.done{color:var(--muted)}
   .app{display:grid; grid-template-columns:minmax(0,1.35fr) minmax(360px,1fr); grid-template-areas:"hd hd" "tabs tabs" "map main" "ft ft"; gap:0 20px; padding:0 22px 40px}
   .hd{grid-area:hd; margin:0 -22px; padding:0 22px}
   .days{grid-area:tabs; margin:0 -22px; padding-left:22px; padding-right:22px}
-  .mapwrap{grid-area:map; position:sticky; top:calc(var(--hd-h) + var(--tab-h) + 16px); margin-top:16px; border:1.5px solid var(--rule); border-radius:16px; box-shadow:var(--shadow); overflow:hidden; height:calc(100vh - var(--hd-h) - var(--tab-h) - 48px)}
+  .mapwrap{grid-area:map; position:sticky; top:calc(var(--hd-h) + var(--tab-h) + 16px); margin-top:16px; border:1.5px solid var(--rule); border-radius:16px; box-shadow:var(--shadow); overflow:hidden; height:calc(100dvh - var(--hd-h) - var(--tab-h) - 48px)}
   .mapwrap .mapbox{height:auto; flex:1 1 auto}
   .mapwrap{display:flex; flex-direction:column}
   main, #infoPane{grid-area:main; padding:16px 0 0}

@@ -71,7 +71,7 @@ const MiniMap = (() => {
     resize() {
       const r = this.box.getBoundingClientRect();
       this.w = Math.max(80, r.width); this.h = Math.max(80, r.height);
-      const dpr = Math.min(2.5, window.devicePixelRatio || 1);
+      const dpr = Math.min(3, window.devicePixelRatio || 1);   /* 아이폰 레티나(dpr 3) 그대로 */
       for (const c of [this.cv, this.cv2]) {
         if (!c) continue;
         c.width = Math.round(this.w * dpr); c.height = Math.round(this.h * dpr);
@@ -108,17 +108,23 @@ const MiniMap = (() => {
       this.lat += before[0] - after[0]; this.lng += before[1] - after[1];
       this.draw(); this.onView();
     }
+    /* pad: 숫자 또는 {t,r,b,l} — 줌 버튼·범례에 핀이 가리지 않게 비대칭 여백 */
     fit(pts, pad = 34) {
       if (!pts.length) return;
+      const P = typeof pad === 'number' ? { t: pad, r: pad, b: pad, l: pad } : pad;
       let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
       for (const [la, lo] of pts) {
         const X = px(lo), Y = py(la);
         x0 = Math.min(x0, X); x1 = Math.max(x1, X); y0 = Math.min(y0, Y); y1 = Math.max(y1, Y);
       }
       const dx = Math.max(1e-6, x1 - x0), dy = Math.max(1e-6, y1 - y0);
-      const z = Math.min(Math.log2((this.w - pad * 2) / dx), Math.log2((this.h - pad * 2) / dy));
+      const availW = Math.max(40, this.w - P.l - P.r), availH = Math.max(40, this.h - P.t - P.b);
+      const z = Math.min(Math.log2(availW / dx), Math.log2(availH / dy));
       this.z = Math.max(this.minZ, Math.min(this.maxZ, z));
-      this.lat = unpy((y0 + y1) / 2); this.lng = unpx((x0 + x1) / 2);
+      /* 여백이 비대칭이면 중심도 그만큼 옮긴다 */
+      const s = this.scale();
+      this.lat = unpy((y0 + y1) / 2 + ((P.b - P.t) / 2) / s);
+      this.lng = unpx((x0 + x1) / 2 + ((P.r - P.l) / 2) / s);
       this.draw(); this.onView();
     }
     /* ---------- 타일 ---------- */

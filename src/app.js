@@ -262,6 +262,7 @@
       h += '<div class="sec"><div class="acts">' +
         '<a class="gmap" href="' + gmap(st.q) + '" target="_blank" rel="noopener">구글맵에서 열기 <span class="ar">↗</span></a>' +
         (from ? '<a class="gmap ghost" href="' + gdir(from, st.q, tm) + '" target="_blank" rel="noopener">여기까지 길찾기 <span class="ar">↗</span></a>' : '') +
+        '<button type="button" class="gmap ghost js-showmap">지도에서 보기 🗺</button>' +
         '</div></div>';
     }
     return h + '</div>';
@@ -293,8 +294,19 @@
         '<span class="cv">' + chipsFor(st) + '</span></span>' +
         '<span class="caret" aria-hidden="true">▾</span></button>' +
         '<div class="detwrap" hidden>' + detailHTML(st, prev) + '</div>';
-      const btn = li.querySelector('button');
+      const btn = li.querySelector('.stopbtn');
       btn.addEventListener('click', () => selectStop(si, false));
+      const smap = li.querySelector('.js-showmap');
+      if (smap) smap.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        const ll = llOf(st);
+        setFull(true);
+        if (ll) map.setView(ll[0], ll[1], Math.max(map.z, 16));
+        stopIdx = si;
+        pinData.forEach(p => p.el.classList.toggle('sel', p.i === si));
+        placePins();
+        showSheet(st);
+      });
       ol.appendChild(li);
     });
     list.appendChild(ol);
@@ -316,6 +328,7 @@
   }
   /* 시내 클러스터에서 멀리 떨어진 지점(공항·시라카와고 등) 수 */
   const KM = (a, b) => Math.hypot((a[0] - b[0]) * 111.3, (a[1] - b[1]) * 91.2);
+  const FITPAD = { t: 48, r: 56, b: 38, l: 34 };
   function cluster(d) {
     const pts = d.stops.map(llOf).filter(Boolean);
     if (pts.length < 3) return { core: pts, far: [] };
@@ -327,7 +340,7 @@
   function farCount(d) { return cluster(d).far.length; }
   function fitDay(d, all) {
     const pts = d.stops.map(llOf).filter(Boolean);
-    map.fit(all ? pts : cluster(d).core, 40);
+    map.fit(all ? pts : cluster(d).core, FITPAD);
   }
 
   function renderLegend(d, hasFar) {
@@ -355,6 +368,7 @@
     });
     const closing = stopIdx === si && !fromPin;
     stopIdx = closing ? -1 : si;
+    if (closing) fsheet.hidden = true;
     pinData.forEach(p => p.el.classList.toggle('sel', !closing && p.i === si));
     if (!closing) {
       const st = d.stops[si], ll = llOf(st);
@@ -364,12 +378,9 @@
       if (ll) map.setView(ll[0], ll[1], Math.max(map.z, 15.4));
       placePins();
       if (fromPin) {
-        const li = items[si];
-        if (li) {
-          const y = li.getBoundingClientRect().top + window.scrollY - (mapbox.getBoundingClientRect().bottom + 10);
-          window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
-        }
-      }
+        if (isFull()) showSheet(st);
+        else scrollToStop(si);
+      } else if (isFull()) showSheet(st);
     }
   }
 
@@ -389,6 +400,7 @@
     $('#btnFit').setAttribute('aria-pressed', 'false');
     renderDay(i);
     if (window.scrollY > 40) window.scrollTo({ top: 0, behavior: 'smooth' });
+    fabSync();
     requestAnimationFrame(() => map.resize());
   }
 
@@ -402,12 +414,43 @@
   });
   $('#btnIn').addEventListener('click', () => map.zoomTo(map.z + 1));
   $('#btnOut').addEventListener('click', () => map.zoomTo(map.z - 1));
-  $('#btnFull').addEventListener('click', (e) => {
-    document.body.classList.toggle('full');
-    const on = document.body.classList.contains('full');
-    e.currentTarget.setAttribute('aria-pressed', on ? 'true' : 'false');
-    requestAnimationFrame(() => { map.resize(); placePins(); });
+  const fsheet = $('#fsheet');
+  function setFull(on) {
+    document.body.classList.toggle('full', on);
+    $('#btnFull').setAttribute('aria-pressed', on ? 'true' : 'false');
+    $('#btnFull').firstChild.textContent = on ? '✕' : '⛶';
+    $('#btnFull').querySelector('.lbl').textContent = on ? '닫기' : '크게';
+    if (!on) fsheet.hidden = true;
+    requestAnimationFrame(() => { map.resize(); placePins(); fabSync(); });
+  }
+  const isFull = () => document.body.classList.contains('full');
+  $('#btnFull').addEventListener('click', () => setFull(!isFull()));
+  $('#fab').addEventListener('click', () => setFull(true));
+  $('#fsheetX').addEventListener('click', () => {
+    const si = stopIdx;
+    setFull(false);
+    if (si >= 0) scrollToStop(si);
   });
+  /* 지도가 화면에서 벗어나면 떠 있는 '지도' 버튼을 보여준다 */
+  const fabSync = () => {
+    const r = $('#mapwrap').getBoundingClientRect();
+    $('#fab').classList.toggle('show', !isFull() && dayIdx >= 0 && r.bottom < 64);
+  };
+  window.addEventListener('scroll', fabSync, { passive: true });
+  window.addEventListener('resize', fabSync);
+  function scrollToStop(si) {
+    const li = main.querySelectorAll('.tl > li')[si];
+    if (!li) return;
+    const off = $('.hd').offsetHeight + $('#tabs').offsetHeight + 8;
+    window.scrollTo({ top: Math.max(0, li.getBoundingClientRect().top + window.scrollY - off), behavior: 'smooth' });
+  }
+  function showSheet(st) {
+    if (!isFull()) { fsheet.hidden = true; return; }
+    fsheet.hidden = false;
+    $('#fsheetT').textContent = st.t + ' · ' + st.name;
+    const g = $('#fsheetG');
+    if (st.q) { g.hidden = false; g.href = gmap(st.q); } else g.hidden = true;
+  }
   $('#btnHide').addEventListener('click', (e) => {
     const w = $('#mapwrap');
     w.classList.toggle('hid');

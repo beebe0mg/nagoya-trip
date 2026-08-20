@@ -88,11 +88,15 @@ body{
 a{color:inherit}
 button{font:inherit; color:inherit}
 :focus-visible{outline:2.5px solid var(--ink); outline-offset:2px; border-radius:8px}
-.app{max-width:1320px; margin:0 auto; padding-bottom:calc(40px + env(safe-area-inset-bottom))}
+.app{
+  max-width:1320px; margin:0 auto;
+  padding-bottom:calc(40px + env(safe-area-inset-bottom));
+  padding-left:env(safe-area-inset-left); padding-right:env(safe-area-inset-right);
+}
 
 /* ===== header ===== */
 .hd{position:sticky; top:0; z-index:40; background:var(--paper); border-bottom:1px solid var(--rule)}
-.hd-in{display:flex; align-items:center; gap:10px; padding:9px 14px; min-height:var(--hd-h)}
+.hd-in{display:flex; align-items:center; gap:10px; padding:calc(9px + env(safe-area-inset-top)) 14px 9px; min-height:var(--hd-h)}
 .leaf{font-size:20px; line-height:1}
 .hd-t{min-width:0; flex:1}
 h1{margin:0; font-size:16.5px; font-weight:700; letter-spacing:-.03em; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
@@ -125,7 +129,7 @@ h1{margin:0; font-size:16.5px; font-weight:700; letter-spacing:-.03em; white-spa
 
 /* ===== map ===== */
 .mapwrap{
-  position:sticky; top:calc(var(--hd-h) + var(--tab-h)); z-index:30;
+  position:relative; z-index:1;
   background:var(--card); border-bottom:1px solid var(--rule);
 }
 .mapbar{display:flex; align-items:center; gap:8px; padding:8px 12px 8px 14px; border-bottom:1px solid var(--rule); background:var(--card-2)}
@@ -138,7 +142,7 @@ h1{margin:0; font-size:16.5px; font-weight:700; letter-spacing:-.03em; white-spa
 .mb .lbl{display:none}
 .mb:hover{border-color:var(--ink-2)}
 .mb[aria-pressed="true"]{background:var(--ink); color:var(--paper); border-color:var(--ink)}
-.mapbox{position:relative; height:clamp(196px,34vh,380px); background:var(--map-land); overflow:hidden; touch-action:none}
+.mapbox{position:relative; height:clamp(230px,44dvh,460px); background:var(--map-land); overflow:hidden; touch-action:none}
 .mapbox canvas{position:absolute; inset:0; display:block; width:100%; height:100%}
 #cvTop{pointer-events:none}
 
@@ -175,7 +179,7 @@ h1{margin:0; font-size:16.5px; font-weight:700; letter-spacing:-.03em; white-spa
   background:color-mix(in srgb, var(--card) 88%, transparent); border:1px solid var(--rule);
   padding:5px 8px; border-radius:8px; line-height:1.4;
 }
-.legend{display:flex; flex-wrap:nowrap; overflow-x:auto; scrollbar-width:none; gap:5px 13px; padding:7px 14px 8px; background:var(--card-2); border-top:1px solid var(--rule)}
+.legend{display:flex; flex-wrap:wrap; gap:5px 13px; padding:7px 14px 8px; background:var(--card-2); border-top:1px solid var(--rule)}
 .legend::-webkit-scrollbar{display:none}
 .lg{flex:0 0 auto; display:flex; align-items:center; gap:5px; white-space:nowrap; font-family:var(--f-mono); font-size:10.5px; color:var(--ink-2)}
 .lg i{display:block; width:19px; height:3.5px; border-radius:2px; background:currentColor}
@@ -184,10 +188,15 @@ h1{margin:0; font-size:16.5px; font-weight:700; letter-spacing:-.03em; white-spa
 .lg.l-w i{height:0; border-top:3.5px dashed var(--walk); border-radius:0}
 .lg.l-h i{width:12px; height:12px; border-radius:4px}
 .mapwrap.hid .mapbox, .mapwrap.hid .legend{display:none}
-body.full .mapwrap{position:fixed; inset:0; z-index:80; border:0; display:flex; flex-direction:column}
+body.full .mapwrap{
+  position:fixed; inset:0; z-index:80; border:0; display:flex; flex-direction:column;
+  padding-top:env(safe-area-inset-top); padding-bottom:env(safe-area-inset-bottom);
+  background:var(--card);
+}
 body.full .mapbox{flex:1 1 auto; height:auto; max-height:none}
 body.full{overflow:hidden}
 body.full .mb#btnFull{background:var(--ink); color:var(--paper); border-color:var(--ink)}
+body.full .legend{display:none}
 
 /* ===== day body ===== */
 main{padding:14px 14px 0; display:flex; flex-direction:column; gap:13px}
@@ -325,6 +334,29 @@ ul.check .bx{flex:0 0 auto; width:20px; height:20px; border-radius:6px; border:2
 ul.check li.done .bx{background:var(--ink); border-color:var(--ink); color:var(--paper)}
 ul.check li.done{color:var(--muted)}
 
+.fab{
+  position:fixed; right:14px; bottom:calc(16px + env(safe-area-inset-bottom)); z-index:50;
+  display:none; align-items:center; gap:7px; padding:11px 15px; min-height:46px;
+  background:var(--ink); color:var(--paper); border:0; border-radius:999px;
+  font-size:14px; font-weight:600; letter-spacing:-.02em; cursor:pointer;
+  box-shadow:0 4px 16px rgba(16,18,28,.28);
+}
+.fab.show{display:inline-flex}
+body.full .fab{display:none !important}
+.fsheet{
+  position:fixed; left:12px; right:12px; bottom:calc(12px + env(safe-area-inset-bottom)); z-index:90;
+  display:flex; flex-direction:column; gap:9px;
+  background:var(--card); border:1.5px solid var(--rule-2); border-radius:14px;
+  padding:12px 14px; box-shadow:0 10px 30px rgba(0,0,0,.34);
+}
+.fsheet .fs-t{font-size:15px; font-weight:600; letter-spacing:-.02em; line-height:1.4}
+.fsheet .fs-b{display:flex; gap:8px}
+.fsheet .fs-g, .fsheet .fs-x{
+  flex:1 1 0; display:inline-flex; align-items:center; justify-content:center; min-height:42px;
+  border-radius:10px; font-size:13.5px; font-weight:600; text-decoration:none; cursor:pointer;
+}
+.fsheet .fs-g{background:transparent; color:var(--ink); border:1.5px solid var(--rule-2)}
+.fsheet .fs-x{background:var(--ink); color:var(--paper); border:0}
 .ft{margin:26px 14px 0; padding-top:16px; border-top:1px solid var(--rule); display:flex; flex-direction:column; gap:5px; font-size:11.5px; color:var(--muted)}
 
 /* mobile stacked tables */
@@ -344,6 +376,7 @@ ul.check li.done{color:var(--muted)}
 /* ===== desktop ===== */
 @media (min-width:1000px){
   :root{--hd-h:60px}
+  .fab, .fsheet{display:none !important}
   .hd-in{padding:12px 22px}
   h1{font-size:21px}
   .hd-s{font-size:12.5px}
@@ -353,7 +386,7 @@ ul.check li.done{color:var(--muted)}
   .app{display:grid; grid-template-columns:minmax(0,1.35fr) minmax(360px,1fr); grid-template-areas:"hd hd" "tabs tabs" "map main" "ft ft"; gap:0 20px; padding:0 22px 40px}
   .hd{grid-area:hd; margin:0 -22px; padding:0 22px}
   .days{grid-area:tabs; margin:0 -22px; padding-left:22px; padding-right:22px}
-  .mapwrap{grid-area:map; position:sticky; top:calc(var(--hd-h) + var(--tab-h) + 16px); margin-top:16px; border:1.5px solid var(--rule); border-radius:16px; box-shadow:var(--shadow); overflow:hidden; height:calc(100vh - var(--hd-h) - var(--tab-h) - 48px)}
+  .mapwrap{grid-area:map; position:sticky; top:calc(var(--hd-h) + var(--tab-h) + 16px); margin-top:16px; border:1.5px solid var(--rule); border-radius:16px; box-shadow:var(--shadow); overflow:hidden; height:calc(100dvh - var(--hd-h) - var(--tab-h) - 48px)}
   .mapwrap .mapbox{height:auto; flex:1 1 auto}
   .mapwrap{display:flex; flex-direction:column}
   main, #infoPane{grid-area:main; padding:16px 0 0}
@@ -411,6 +444,14 @@ ul.check li.done{color:var(--muted)}
     <div class="legend" id="legend"></div>
   </section>
 
+  <button type="button" class="fab" id="fab" aria-label="지도 크게 보기">🗺<span>지도</span></button>
+  <div class="fsheet" id="fsheet" hidden>
+    <span class="fs-t" id="fsheetT"></span>
+    <span class="fs-b">
+      <a class="fs-g" id="fsheetG" href="#" target="_blank" rel="noopener">구글맵 ↗</a>
+      <button type="button" class="fs-x" id="fsheetX">일정 보기</button>
+    </span>
+  </div>
   <main id="main"></main>
   <section id="infoPane" hidden></section>
 
@@ -1084,7 +1125,7 @@ const MiniMap = (() => {
     resize() {
       const r = this.box.getBoundingClientRect();
       this.w = Math.max(80, r.width); this.h = Math.max(80, r.height);
-      const dpr = Math.min(2.5, window.devicePixelRatio || 1);
+      const dpr = Math.min(3, window.devicePixelRatio || 1);   /* 아이폰 레티나(dpr 3) 그대로 */
       for (const c of [this.cv, this.cv2]) {
         if (!c) continue;
         c.width = Math.round(this.w * dpr); c.height = Math.round(this.h * dpr);
@@ -1121,17 +1162,23 @@ const MiniMap = (() => {
       this.lat += before[0] - after[0]; this.lng += before[1] - after[1];
       this.draw(); this.onView();
     }
+    /* pad: 숫자 또는 {t,r,b,l} — 줌 버튼·범례에 핀이 가리지 않게 비대칭 여백 */
     fit(pts, pad = 34) {
       if (!pts.length) return;
+      const P = typeof pad === 'number' ? { t: pad, r: pad, b: pad, l: pad } : pad;
       let x0 = 1e9, y0 = 1e9, x1 = -1e9, y1 = -1e9;
       for (const [la, lo] of pts) {
         const X = px(lo), Y = py(la);
         x0 = Math.min(x0, X); x1 = Math.max(x1, X); y0 = Math.min(y0, Y); y1 = Math.max(y1, Y);
       }
       const dx = Math.max(1e-6, x1 - x0), dy = Math.max(1e-6, y1 - y0);
-      const z = Math.min(Math.log2((this.w - pad * 2) / dx), Math.log2((this.h - pad * 2) / dy));
+      const availW = Math.max(40, this.w - P.l - P.r), availH = Math.max(40, this.h - P.t - P.b);
+      const z = Math.min(Math.log2(availW / dx), Math.log2(availH / dy));
       this.z = Math.max(this.minZ, Math.min(this.maxZ, z));
-      this.lat = unpy((y0 + y1) / 2); this.lng = unpx((x0 + x1) / 2);
+      /* 여백이 비대칭이면 중심도 그만큼 옮긴다 */
+      const s = this.scale();
+      this.lat = unpy((y0 + y1) / 2 + ((P.b - P.t) / 2) / s);
+      this.lng = unpx((x0 + x1) / 2 + ((P.r - P.l) / 2) / s);
       this.draw(); this.onView();
     }
     /* ---------- 타일 ---------- */
@@ -1721,6 +1768,7 @@ const MiniMap = (() => {
       h += '<div class="sec"><div class="acts">' +
         '<a class="gmap" href="' + gmap(st.q) + '" target="_blank" rel="noopener">구글맵에서 열기 <span class="ar">↗</span></a>' +
         (from ? '<a class="gmap ghost" href="' + gdir(from, st.q, tm) + '" target="_blank" rel="noopener">여기까지 길찾기 <span class="ar">↗</span></a>' : '') +
+        '<button type="button" class="gmap ghost js-showmap">지도에서 보기 🗺</button>' +
         '</div></div>';
     }
     return h + '</div>';
@@ -1752,8 +1800,19 @@ const MiniMap = (() => {
         '<span class="cv">' + chipsFor(st) + '</span></span>' +
         '<span class="caret" aria-hidden="true">▾</span></button>' +
         '<div class="detwrap" hidden>' + detailHTML(st, prev) + '</div>';
-      const btn = li.querySelector('button');
+      const btn = li.querySelector('.stopbtn');
       btn.addEventListener('click', () => selectStop(si, false));
+      const smap = li.querySelector('.js-showmap');
+      if (smap) smap.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        const ll = llOf(st);
+        setFull(true);
+        if (ll) map.setView(ll[0], ll[1], Math.max(map.z, 16));
+        stopIdx = si;
+        pinData.forEach(p => p.el.classList.toggle('sel', p.i === si));
+        placePins();
+        showSheet(st);
+      });
       ol.appendChild(li);
     });
     list.appendChild(ol);
@@ -1775,6 +1834,7 @@ const MiniMap = (() => {
   }
   /* 시내 클러스터에서 멀리 떨어진 지점(공항·시라카와고 등) 수 */
   const KM = (a, b) => Math.hypot((a[0] - b[0]) * 111.3, (a[1] - b[1]) * 91.2);
+  const FITPAD = { t: 48, r: 56, b: 38, l: 34 };
   function cluster(d) {
     const pts = d.stops.map(llOf).filter(Boolean);
     if (pts.length < 3) return { core: pts, far: [] };
@@ -1786,7 +1846,7 @@ const MiniMap = (() => {
   function farCount(d) { return cluster(d).far.length; }
   function fitDay(d, all) {
     const pts = d.stops.map(llOf).filter(Boolean);
-    map.fit(all ? pts : cluster(d).core, 40);
+    map.fit(all ? pts : cluster(d).core, FITPAD);
   }
 
   function renderLegend(d, hasFar) {
@@ -1814,6 +1874,7 @@ const MiniMap = (() => {
     });
     const closing = stopIdx === si && !fromPin;
     stopIdx = closing ? -1 : si;
+    if (closing) fsheet.hidden = true;
     pinData.forEach(p => p.el.classList.toggle('sel', !closing && p.i === si));
     if (!closing) {
       const st = d.stops[si], ll = llOf(st);
@@ -1823,12 +1884,9 @@ const MiniMap = (() => {
       if (ll) map.setView(ll[0], ll[1], Math.max(map.z, 15.4));
       placePins();
       if (fromPin) {
-        const li = items[si];
-        if (li) {
-          const y = li.getBoundingClientRect().top + window.scrollY - (mapbox.getBoundingClientRect().bottom + 10);
-          window.scrollTo({ top: Math.max(0, y), behavior: 'smooth' });
-        }
-      }
+        if (isFull()) showSheet(st);
+        else scrollToStop(si);
+      } else if (isFull()) showSheet(st);
     }
   }
 
@@ -1848,6 +1906,7 @@ const MiniMap = (() => {
     $('#btnFit').setAttribute('aria-pressed', 'false');
     renderDay(i);
     if (window.scrollY > 40) window.scrollTo({ top: 0, behavior: 'smooth' });
+    fabSync();
     requestAnimationFrame(() => map.resize());
   }
 
@@ -1861,12 +1920,43 @@ const MiniMap = (() => {
   });
   $('#btnIn').addEventListener('click', () => map.zoomTo(map.z + 1));
   $('#btnOut').addEventListener('click', () => map.zoomTo(map.z - 1));
-  $('#btnFull').addEventListener('click', (e) => {
-    document.body.classList.toggle('full');
-    const on = document.body.classList.contains('full');
-    e.currentTarget.setAttribute('aria-pressed', on ? 'true' : 'false');
-    requestAnimationFrame(() => { map.resize(); placePins(); });
+  const fsheet = $('#fsheet');
+  function setFull(on) {
+    document.body.classList.toggle('full', on);
+    $('#btnFull').setAttribute('aria-pressed', on ? 'true' : 'false');
+    $('#btnFull').firstChild.textContent = on ? '✕' : '⛶';
+    $('#btnFull').querySelector('.lbl').textContent = on ? '닫기' : '크게';
+    if (!on) fsheet.hidden = true;
+    requestAnimationFrame(() => { map.resize(); placePins(); fabSync(); });
+  }
+  const isFull = () => document.body.classList.contains('full');
+  $('#btnFull').addEventListener('click', () => setFull(!isFull()));
+  $('#fab').addEventListener('click', () => setFull(true));
+  $('#fsheetX').addEventListener('click', () => {
+    const si = stopIdx;
+    setFull(false);
+    if (si >= 0) scrollToStop(si);
   });
+  /* 지도가 화면에서 벗어나면 떠 있는 '지도' 버튼을 보여준다 */
+  const fabSync = () => {
+    const r = $('#mapwrap').getBoundingClientRect();
+    $('#fab').classList.toggle('show', !isFull() && dayIdx >= 0 && r.bottom < 64);
+  };
+  window.addEventListener('scroll', fabSync, { passive: true });
+  window.addEventListener('resize', fabSync);
+  function scrollToStop(si) {
+    const li = main.querySelectorAll('.tl > li')[si];
+    if (!li) return;
+    const off = $('.hd').offsetHeight + $('#tabs').offsetHeight + 8;
+    window.scrollTo({ top: Math.max(0, li.getBoundingClientRect().top + window.scrollY - off), behavior: 'smooth' });
+  }
+  function showSheet(st) {
+    if (!isFull()) { fsheet.hidden = true; return; }
+    fsheet.hidden = false;
+    $('#fsheetT').textContent = st.t + ' · ' + st.name;
+    const g = $('#fsheetG');
+    if (st.q) { g.hidden = false; g.href = gmap(st.q); } else g.hidden = true;
+  }
   $('#btnHide').addEventListener('click', (e) => {
     const w = $('#mapwrap');
     w.classList.toggle('hid');
