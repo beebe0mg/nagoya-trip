@@ -44,8 +44,8 @@ const INFO = `
         <thead><tr><th>순위</th><th>언제</th><th>무슨 일이 생기나 / 어떻게 막나</th></tr></thead>
         <tr>
           <td><b style="color:var(--warn)">1위</b></td>
-          <td><b>Day 3</b><br><span class="mono">08:20</span></td>
-          <td><b>시라카와고 고속버스를 놓치는 것.</b> 예약제라 다음 편으로 못 옮기고, 놓치면 그날 하루가 통째로 날아가. 앞에 부쵸커피(7:15 오픈·오픈런 명소)가 있어서 줄이 길면 그대로 위험해져.<br><span style="color:var(--ok)">→ 8:05엔 무조건 커피를 끊고 나오기. 줄이 길면 미련 없이 버스센터 편의점으로.</span></td>
+          <td><b>Day 2</b><br><span class="mono">08:50</span></td>
+          <td><b>시라카와고 고속버스를 놓치는 것.</b> 예약제라 다음 편으로 못 옮기고, 놓치면 그날 하루가 통째로 날아가. 앞에 부쵸커피(7:15 오픈·오픈런 명소)가 있어서 줄이 길면 그대로 위험해져.<br><span style="color:var(--ok)">→ 8:35엔 무조건 커피를 끊고 나오기. 줄이 길면 미련 없이 버스센터 편의점으로.</span></td>
         </tr>
         <tr>
           <td><b style="color:var(--warn)">2위</b></td>
@@ -59,8 +59,8 @@ const INFO = `
         </tr>
         <tr>
           <td><b>4위</b></td>
-          <td><b>Day 3</b><br><span class="mono">18:16</span></td>
-          <td><b>시라카와고 버스 복귀 지연.</b> 금요일 저녁 고속도로라 늦을 수 있는데, 애니메이트·라신반이 20시 마감이야. 30분만 늦어도 3연타가 무너져.<br><span style="color:var(--ok)">→ 늦으면 라신반 한 곳만. 쿠지 공식샵(21시)이 제일 늦게 닫으니 순서를 바꿔도 돼.</span></td>
+          <td><b>Day 2</b><br><span class="mono">18:16</span></td>
+          <td><b>시라카와고 버스 복귀 지연.</b> 목요일 저녁 고속도로라 늦을 수 있는데, 애니메이트·라신반이 20시 마감이야. 30분만 늦어도 3연타가 무너져.<br><span style="color:var(--ok)">→ 늦으면 라신반 한 곳만. 쿠지 공식샵(21시)이 제일 늦게 닫으니 순서를 바꿔도 돼.</span></td>
         </tr>
         <tr>
           <td><b>5위</b></td>
@@ -75,7 +75,7 @@ const INFO = `
       </table>
       <div class="callout" style="margin-top:16px">
         <span aria-hidden="true">📌</span>
-        <span><b>지금 당장 할 일</b> — 위험 1위·2위는 대부분 <b>예약 2건</b>으로 사라져. ① 시라카와고 버스(9월 하순 오픈 즉시 8:20편) ② 마에사와규샤 19:30. 이 둘이 안 되면 Day 2·Day 3 저녁이 통째로 흔들려.</span>
+        <span><b>지금 당장 할 일</b> — 위험 1위·2위는 대부분 <b>예약 2건</b>으로 사라져. ① 시라카와고 버스(10/22 08:50편 왕복 · 예약 오픈됨) ② 마에사와규샤 19:30 <b>금요일</b>로. 이 둘이 안 되면 Day 2·Day 3이 통째로 흔들려.</span>
       </div>
     </div>
   </div>
@@ -86,8 +86,8 @@ const INFO = `
       <table class="tt stack">
         <thead><tr><th>티켓</th><th>가격</th><th>언제</th></tr></thead>
         <tr><td><b>뮤스카이</b><br><span style="color:var(--muted)">공항 ⇄ 카나야마</span></td><td class="mono">¥1,390<br>+ 보라선 ¥210</td><td>Day 1 · Day 5</td></tr>
-        <tr><td><b>이누야마 성하마을 킷푸</b><br><span style="color:var(--muted)">왕복 + 성 입장권</span></td><td class="mono">¥1,630</td><td>Day 2<br>메이테츠 나고야역</td></tr>
-        <tr><td><b>시라카와고 고속버스</b><br><span style="color:var(--muted)">예약 필수</span></td><td class="mono">편도 ¥3,600<br>~4,700</td><td>Day 3<br>9월 하순 오픈</td></tr>
+        <tr><td><b>이누야마 성하마을 킷푸</b><br><span style="color:var(--muted)">왕복 + 성 입장권</span></td><td class="mono">¥1,630</td><td>Day 3<br>메이테츠 나고야역</td></tr>
+        <tr><td><b>시라카와고 고속버스</b><br><span style="color:var(--muted)">예약 필수</span></td><td class="mono">편도 ¥3,600<br>~4,700</td><td>Day 2<br>08:50편 · 왕복</td></tr>
         <tr><td><b>도니치에코킷푸</b><br><span style="color:var(--muted)">주말 지하철 무제한</span></td><td class="mono">¥620 / 일</td><td>Day 4 · Day 5</td></tr>
       </table>
     </div>
@@ -97,8 +97,8 @@ const INFO = `
     <h3>⏰ 이것만 지키면 성공</h3>
     <div class="body">
       <table class="tt">
-        <tr><td style="width:128px"><b>시라카와고 버스</b></td><td>9월 하순 예약 오픈 즉시 8:20편</td></tr>
-        <tr><td><b>마에사와규샤</b></td><td>출발 전 19:30으로 예약 (052-204-6077)</td></tr>
+        <tr><td style="width:128px"><b>시라카와고 버스</b></td><td>10/22(목) 08:50편 → 15:30 복귀편 왕복</td></tr>
+        <tr><td><b>마에사와규샤</b></td><td>10/23(금) 19:30으로 예약 (052-204-6077)</td></tr>
         <tr><td><b>야바톤</b></td><td>12시 전 입장 = 웨이팅 0</td></tr>
         <tr><td><b>호라이켄</b></td><td>18:30 정리권 받기 마지노선</td></tr>
         <tr><td><b>나고야성</b></td><td>입장 16:00 마감</td></tr>
@@ -118,8 +118,8 @@ const INFO = `
         <ul class="check">
           <li class="done"><span class="bx">✓</span><span>항공권 확정 — 진에어 왕복 · 예약번호 JP283U</span></li>
           <li class="done"><span class="bx">✓</span><span>호텔 확정 — 마이스테이스 나고야-사카에 4박</span></li>
-          <li><span class="bx"></span><span><b>시라카와고 버스 왕복 예약</b> — highwaybus.com, 9월 하순 오픈, 8:20편</span></li>
-          <li><span class="bx"></span><span><b>마에사와규샤 후시미야 예약</b> — 19:30 (052-204-6077)</span></li>
+          <li><span class="bx"></span><span><b>시라카와고 버스 왕복 예약</b> — highwaybus.com · 10/22 08:50편 + 15:30편</span></li>
+          <li><span class="bx"></span><span><b>마에사와규샤 후시미야 예약</b> — 10/23(금) 19:30 (052-204-6077)</span></li>
           <li><span class="bx"></span><span>🐾 정야웅 맡기기 + 돌봄 가이드 공유</span></li>
           <li><span class="bx"></span><span>환전 / 트래블카드 — 지하철은 모바일 스이카 터치로 해결</span></li>
         </ul>
