@@ -75,7 +75,7 @@ const INFO = `
       </table>
       <div class="callout" style="margin-top:16px">
         <span aria-hidden="true">📌</span>
-        <span><b>지금 당장 할 일</b> — 위험 1위·2위는 대부분 <b>예약 2건</b>으로 사라져. ① 시라카와고 버스 <b>187054678</b>(10/22 08:50 왕복) ② 마에사와규샤 <b>SE2012284</b>(10/23 금 19:30). <b>둘 다 예약 완료 ✅</b> — 이제 남은 건 버스 승차권 발권뿐이야.</span>
+        <span><b>지금 당장 할 일</b> — 위험 1위·2위는 대부분 <b>예약 2건</b>으로 사라져. ① 시라카와고 버스 <b>187054678</b>(10/22 08:50 왕복 · 승차권 발권까지 완료) ② 마에사와규샤 <b>SE2012284</b>(10/23 금 19:30). <b>예약은 전부 끝났어 ✅</b> 남은 건 짐 싸기랑 정야웅 맡기기뿐!</span>
       </div>
     </div>
   </div>
@@ -97,7 +97,7 @@ const INFO = `
     <h3>⏰ 이것만 지키면 성공</h3>
     <div class="body">
       <table class="tt">
-        <tr><td style="width:128px"><b>시라카와고 버스</b></td><td>10/22(목) 08:50편 → 15:30 복귀편 왕복</td></tr>
+        <tr><td style="width:128px"><b>시라카와고 버스</b></td><td>✅ 예약·발권 완료 — <b>187054678</b> · 08:50 → 15:30 복귀 · 01C·01D</td></tr>
         <tr><td><b>마에사와규샤</b></td><td>✅ 예약 완료 — <b>SE2012284</b> · 10/23(금) 19:30 · 2명 · 반개인실</td></tr>
         <tr><td><b>야바톤</b></td><td>12시 전 입장 = 웨이팅 0</td></tr>
         <tr><td><b>호라이켄</b></td><td>18:30 정리권 받기 마지노선</td></tr>
@@ -118,7 +118,7 @@ const INFO = `
         <ul class="check">
           <li class="done"><span class="bx">✓</span><span>항공권 확정 — 진에어 왕복 · 예약번호 JP283U</span></li>
           <li class="done"><span class="bx">✓</span><span>호텔 확정 — 마이스테이스 나고야-사카에 4박</span></li>
-          <li><span class="bx"></span><span><b>시라카와고 버스 왕복 예약</b> — highwaybus.com · 10/22 08:50편 + 15:30편</span></li>
+          <li class="done"><span class="bx">✓</span><span><b>시라카와고 버스 왕복 예약 + 승차권 발권 완료</b> — 187054678 · 10/22 08:50편 + 15:30편 · 좌석 01C·01D</span></li>
           <li class="done"><span class="bx">✓</span><span><b>마에사와규샤 예약 완료</b> — SE2012284 · 10/23(금) 19:30 · 2명 · 반개인실 · 좌석만 예약</span></li>
           <li><span class="bx"></span><span>🐾 정야웅 맡기기 + 돌봄 가이드 공유</span></li>
           <li><span class="bx"></span><span>환전 / 트래블카드 — 지하철은 모바일 스이카 터치로 해결</span></li>
