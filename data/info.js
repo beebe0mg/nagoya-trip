@@ -20,8 +20,34 @@ const INFO = `
         <tr><td style="width:104px"><span class="chip c-yellow">노란선</span></td><td><b>히가시야마선</b> — 나고야역 갈 때 (신칸센·버스센터·애니메이트). 사카에→나고야 5분 직행.</td></tr>
         <tr><td><span class="chip c-purple">보라선</span></td><td><b>메이조선</b> — 야바초(미소카츠·히쓰마부시), 카미마에즈(오스), 카나야마(공항 환승), 나고야조. 전부 1~4정거장.</td></tr>
         <tr><td><span class="chip c-red">뮤스카이</span></td><td>공항↔호텔은 딱 한 패턴 — 뮤스카이 → 카나야마 → 보라선 2정거장 → 사카에 (약 40분 · ¥1,600/인)</td></tr>
+        <tr><td><span class="chip">💳 결제</span></td><td><b>전부 실물 마나카 터치.</b> 티머니랑 똑같이 들어갈 때·나올 때 한 번씩. 표를 따로 끊는 건 뮤 티켓·이누야마 킷푸·도니치에코킷푸 셋뿐.</td></tr>
       </table>
       <p style="margin:14px 0 0; font-size:14.5px; color:var(--muted)">외울 게 하나 있다면: 노란선 타고 나고야역 갈 땐 <b>타카바타(高畑) 방면</b> 열차.</p>
+    </div>
+  </div>
+
+
+  <div class="card">
+    <h3>💳 교통카드 = 실물 마나카 (스이카 대신)</h3>
+    <div class="body">
+      <p style="margin:0 0 14px; font-size:15px; color:var(--ink-2)"><b>모바일 스이카는 포기.</b> Apple Pay에 등록할 카드가 없고 카카오페이·티머니는 일본 개찰구에서 안 돼. 대신 Day 1 공항 메이테츠역에서 <b>실물 마나카</b>를 사면 똑같이 터치로 다 탈 수 있어.</p>
+      <table class="tt">
+        <tr><td style="width:104px"><b>어디서</b></td><td>Day 1 10:10 · 메이테츠 센트레아역 발매기 (「manaca 購入」) 또는 창구</td></tr>
+        <tr><td><b>얼마</b></td><td><b>¥5,000짜리 1인 1장</b> — 보증금 ¥500 + 잔액 ¥4,500 · <b>현금만</b> · 2장 ¥10,000 지폐 준비</td></tr>
+        <tr><td><b>어디서 되나</b></td><td>나고야 지하철 전 노선 · 메이테츠 (공항선·이누야마선·산노) · JR · 시내버스 · 편의점 결제까지</td></tr>
+        <tr><td><b>안 되는 것</b></td><td>뮤 티켓(뮤스카이 특급권) · 이누야마 성하마을 킷푸 · 도니치에코킷푸 — 셋은 종이표라 따로 사야 해. 기본운임은 마나카에서 빠지고 뮤 티켓만 얹는 구조</td></tr>
+        <tr><td><b>충전</b></td><td>아무 역 발매기 「チャージ」→ 현금 ¥1,000 단위. 세븐일레븐·로손 계산대에서도 "차지 오네가이시마스"</td></tr>
+        <tr><td><b>환불</b></td><td>Day 5 공항 메이테츠 창구 — 보증금 ¥500 반환, 잔액은 수수료 ¥220 빼고 반환. 잔액 ¥220 이하면 보증금만</td></tr>
+      </table>
+      <p style="margin:14px 0 6px; font-size:14px; color:var(--ink-2)"><b>1인 마나카 지출 예상 (¥4,500이면 거의 끝)</b></p>
+      <table class="tt">
+        <tr><td style="width:104px"><b>Day 1</b></td><td class="mono">약 ¥2,300 <span style="color:var(--muted); font-family:var(--f-sans)">공항→카나야마 ¥890 · 지하철 4번 · 산노 온천 메이테츠 왕복</span></td></tr>
+        <tr><td><b>Day 2</b></td><td class="mono">¥420 <span style="color:var(--muted); font-family:var(--f-sans)">사카에⇄나고야역 왕복 · 버스는 결제 완료</span></td></tr>
+        <tr><td><b>Day 3</b></td><td class="mono">¥630 <span style="color:var(--muted); font-family:var(--f-sans)">지하철 3번 · 이누야마 왕복은 킷푸 ¥1,630 별도</span></td></tr>
+        <tr><td><b>Day 4</b></td><td class="mono">¥0 <span style="color:var(--muted); font-family:var(--f-sans)">도니치에코킷푸 ¥620 (현금) 하루 무제한</span></td></tr>
+        <tr><td><b>Day 5</b></td><td class="mono">약 ¥890 <span style="color:var(--muted); font-family:var(--f-sans)">카나야마→공항 · 시내는 킷푸 ¥620 또는 마나카 ¥840</span></td></tr>
+        <tr><td><b>합계</b></td><td class="mono"><b>약 ¥4,200~4,500</b> <span style="color:var(--muted); font-family:var(--f-sans)">모자라면 Day 4~5에 ¥1,000 한 번 충전</span></td></tr>
+      </table>
     </div>
   </div>
 
@@ -69,8 +95,8 @@ const INFO = `
         </tr>
         <tr>
           <td><b>6위</b></td>
-          <td><b>Day 1</b><br><span class="mono">09:25~10:20</span></td>
-          <td><b>입국 버퍼 55분.</b> 주부공항은 한산한 편이라 보통 충분하지만, 여유가 두껍진 않아. 밀려도 뒤가 유연해서 피해는 작아.<br><span style="color:var(--ok)">→ 밀리면 호텔에 짐 맡기는 걸 건너뛰고 야바톤부터. 캐리어는 야바초역 코인로커에.</span></td>
+          <td><b>Day 1</b><br><span class="mono">09:25~11:00</span></td>
+          <td><b>입국 45분 + 마나카·뮤 티켓 10분 + 이동 40분.</b> 주부공항은 한산한 편이라 보통 충분하지만, 야바톤 11:40 마지노선까지 호텔에서 쓸 수 있는 시간이 20분뿐이야. 마나카는 건너뛰면 안 돼 — 5일이 다 꼬여.<br><span style="color:var(--ok)">→ 밀리면 호텔에 짐 맡기는 걸 건너뛰고 야바톤부터. 캐리어는 야바초역 코인로커에.</span></td>
         </tr>
       </table>
       <div class="callout" style="margin-top:16px">
@@ -89,7 +115,8 @@ const INFO = `
     <div class="body">
       <table class="tt stack">
         <thead><tr><th>티켓</th><th>가격</th><th>언제</th></tr></thead>
-        <tr><td><b>뮤스카이</b><br><span style="color:var(--muted)">공항 ⇄ 카나야마</span></td><td class="mono">¥1,390<br>+ 보라선 ¥210</td><td>Day 1 · Day 5</td></tr>
+        <tr><td><b>마나카 (실물 교통카드)</b><br><span style="color:var(--muted)">5일 지하철·메이테츠 전부 이걸로 터치</span></td><td class="mono">¥5,000 / 인<br><span style="color:var(--muted)">보증금 ¥500 포함 · 현금</span></td><td>Day 1 10:10<br>공항 메이테츠역 발매기</td></tr>
+        <tr><td><b>뮤스카이</b><br><span style="color:var(--muted)">공항 ⇄ 카나야마 · 기본운임은 마나카, 뮤 티켓만 창구</span></td><td class="mono">¥1,390<br>+ 보라선 ¥210</td><td>Day 1 공항 창구<br>Day 5 카나야마역</td></tr>
         <tr><td><b>이누야마 성하마을 킷푸</b><br><span style="color:var(--muted)">왕복 + 성 입장권</span></td><td class="mono">¥1,630</td><td>Day 3<br>메이테츠 나고야역</td></tr>
         <tr><td><b>시라카와고 고속버스</b><br><span style="color:var(--muted)">예약 필수</span></td><td class="mono">편도 ¥3,600<br>~4,700</td><td>Day 2<br>08:50편 · 왕복</td></tr>
         <tr><td><b>도니치에코킷푸</b><br><span style="color:var(--muted)">주말 지하철 무제한</span></td><td class="mono">¥620 / 일</td><td>Day 4 · Day 5</td></tr>
@@ -125,7 +152,8 @@ const INFO = `
           <li class="done"><span class="bx">✓</span><span><b>시라카와고 버스 왕복 예약 + 승차권 발권 완료</b> — 187054678 · 10/22 08:50편 + 15:30편 · 좌석 01C·01D</span></li>
           <li class="done"><span class="bx">✓</span><span><b>마에사와규샤 예약 완료</b> — SE2012284 · 10/23(금) 19:30 · 2명 · 반개인실 · 좌석만 예약</span></li>
           <li><span class="bx"></span><span>🐾 정야웅 맡기기 + 돌봄 가이드 공유</span></li>
-          <li><span class="bx"></span><span>환전 / 트래블카드 — 지하철은 모바일 스이카 터치로 해결</span></li>
+          <li><span class="bx"></span><span><b>환전 — 1인 ¥15,000 안팎 지폐</b> (마나카 ¥5,000 + 도니치에코킷푸 + 현금만 받는 덴무스·온천 수건). 공항 도착 전에 끝내기</span></li>
+          <li class="done"><span class="bx">✓</span><span><s>모바일 스이카</s> — Apple Pay 카드 없어서 포기 → Day 1 공항에서 실물 마나카로 결정</span></li>
         </ul>
         <ul class="check">
           <li><span class="bx"></span><span>유심 / 로밍</span></li>
