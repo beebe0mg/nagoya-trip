@@ -75,8 +75,8 @@ const INFO = `
         </tr>
         <tr>
           <td><b style="color:var(--warn)">2위</b></td>
-          <td><b>Day 4</b><br><span class="mono">18:10→18:25</span></td>
-          <td><b>오아시스21 → 호라이켄 정리권.</b> <s style="color:var(--muted)">지하철 15분(개찰+대기+승차+도보)</s> → <b>도보 12분으로 바꿔서 배차 변수를 없앴어.</b> 그래도 18:30 마감은 그대로라 18:10엔 나와야 해.<br><span style="color:var(--ok)">→ 불안하면 둘이 나누기. 한 명은 타워에서 바로 걸어가서 번호표부터 받기.</span></td>
+          <td><b>Day 4</b><br><span class="mono">18:00→18:15</span></td>
+          <td><b>오아시스21 → 호라이켄 정리권.</b> <s style="color:var(--muted)">지하철 15분 · 여유 0</s> → <b>도보 12분 + 건물 안 3분으로 바꾸고, 타워를 17:45에 내려와 18:00 출발.</b> 정리권 마감까지 버퍼 15분.<br><span style="color:var(--ok)">→ 그래도 불안하면 둘이 나누기. 한 명은 타워에서 바로 걸어가서 번호표부터 받기.</span></td>
         </tr>
         <tr>
           <td><b>—</b></td>
@@ -95,8 +95,8 @@ const INFO = `
         </tr>
         <tr>
           <td><b>6위</b></td>
-          <td><b>Day 1</b><br><span class="mono">09:25~11:00</span></td>
-          <td><b>입국 45분 + 마나카·뮤 티켓 10분 + 이동 40분.</b> 주부공항은 한산한 편이라 보통 충분하지만, 야바톤 11:40 마지노선까지 호텔에서 쓸 수 있는 시간이 20분뿐이야. 마나카는 건너뛰면 안 돼 — 5일이 다 꼬여.<br><span style="color:var(--ok)">→ 밀리면 호텔에 짐 맡기는 걸 건너뛰고 야바톤부터. 캐리어는 야바초역 코인로커에.</span></td>
+          <td><b>Day 1</b><br><span class="mono">09:25~12:00</span></td>
+          <td><b>입국 45분 + 마나카·뮤 티켓 10분 + 이동 40분 + 호텔 20분.</b> 야바톤을 12:00 목표로 늦춰서 공항 도착부터 2시간 35분 — 뮤스카이 한 편(30분) 놓쳐도 돼. Visit Japan Web QR을 미리 받아두면 입국 줄에서 10~20분 더 벌어. 마나카는 건너뛰면 안 돼 — 5일이 다 꼬여.<br><span style="color:var(--ok)">→ 그래도 밀리면 호텔에 짐 맡기는 걸 건너뛰고 야바톤부터. 캐리어는 야바초역 코인로커에.</span></td>
         </tr>
       </table>
       <div class="callout" style="margin-top:16px">
@@ -130,8 +130,8 @@ const INFO = `
       <table class="tt">
         <tr><td style="width:128px"><b>시라카와고 버스</b></td><td>✅ 예약·발권 완료 — <b>187054678</b> · 08:50 → 15:30 복귀 · 01C·01D</td></tr>
         <tr><td><b>마에사와규샤</b></td><td>✅ 예약 완료 — <b>SE2012284</b> · 10/23(금) 19:30 · 2명 · 반개인실</td></tr>
-        <tr><td><b>야바톤</b></td><td>12시 전 입장 = 웨이팅 0</td></tr>
-        <tr><td><b>호라이켄</b></td><td>18:30 정리권 받기 마지노선</td></tr>
+        <tr><td><b>야바톤</b></td><td>12:00 목표 — 20분 밀려도 뒤에 여유 있음</td></tr>
+        <tr><td><b>호라이켄</b></td><td>18:30 정리권 — 오아시스21에서 18:00 걸어서 출발 (버퍼 15분)</td></tr>
         <tr><td><b>나고야성</b></td><td>🌟 10/24은 <b>Be GOLD 라이트업으로 19:30까지</b> — 이날만 시간 자유 (평소는 16:00 마감) · 관람료 <b>¥1,000/인</b> 10/1 인상</td></tr>
         <tr><td><b>에비스야</b></td><td>일요일 휴무 — 반드시 Day 4(토)</td></tr>
         <tr><td><b>덴무스 센주</b></td><td>14시 전 · 품절 조기마감</td></tr>
@@ -152,6 +152,7 @@ const INFO = `
           <li class="done"><span class="bx">✓</span><span><b>시라카와고 버스 왕복 예약 + 승차권 발권 완료</b> — 187054678 · 10/22 08:50편 + 15:30편 · 좌석 01C·01D</span></li>
           <li class="done"><span class="bx">✓</span><span><b>마에사와규샤 예약 완료</b> — SE2012284 · 10/23(금) 19:30 · 2명 · 반개인실 · 좌석만 예약</span></li>
           <li><span class="bx"></span><span>🐾 정야웅 맡기기 + 돌봄 가이드 공유</span></li>
+          <li><span class="bx"></span><span><b>Visit Japan Web 등록</b> — 입국심사·세관 QR 2명 다 미리 발급. Day 1 입국 줄 10~20분 단축</span></li>
           <li><span class="bx"></span><span><b>환전 — 1인 ¥15,000 안팎 지폐</b> (마나카 ¥5,000 + 도니치에코킷푸 + 현금만 받는 덴무스·온천 수건). 공항 도착 전에 끝내기</span></li>
           <li class="done"><span class="bx">✓</span><span><s>모바일 스이카</s> — Apple Pay 카드 없어서 포기 → Day 1 공항에서 실물 마나카로 결정</span></li>
         </ul>
