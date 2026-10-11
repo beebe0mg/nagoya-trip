@@ -9,6 +9,6 @@ OpenStreetMap 기반 실지도 위에 하루 동선을 그리고, 지하철 노�
 - `python3 build.py` 로 `index.html`·`artifact.html` 재생성
 
 ## 지도
-- 타일: [OpenStreetMap](https://www.openstreetmap.org/copyright) 타일 (온라인)
+- 타일: 기본(깔끔)은 Esri World Light/Dark Gray Base, 「상세」는 [OpenStreetMap](https://www.openstreetmap.org/copyright) 타일 (온라인 · API 키 불필요)
 - 타일을 못 불러오는 환경에서는 파일에 내장된 OSM 벡터 데이터(지하철·메이테츠 노선, 물·공원·간선도로·해안선)로 자동 대체
 - 데이터 © OpenStreetMap 기여자 · ODbL

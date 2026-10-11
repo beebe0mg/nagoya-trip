@@ -73,7 +73,7 @@
     const osm = '<a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> 기여자';
     $('#attr').innerHTML = !ok ? ('OSM 데이터 내장 · © ' + osm)
       : map.style === 'osm' ? ('지도 © ' + osm)
-      : ('지도 © ' + osm + ' · 타일 © <a href="https://carto.com/attributions" target="_blank" rel="noopener">CARTO</a>');
+      : ('지도 © ' + osm + ' · 타일 © <a href="https://www.esri.com/" target="_blank" rel="noopener">Esri</a>');
   }
 
   /* ---------- 하루 동선 → 지도 선 ---------- */

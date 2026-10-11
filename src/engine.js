@@ -136,10 +136,9 @@ const MiniMap = (() => {
     }
     tileURL(z, x, y) {
       if (this.style === 'osm') return 'https://tile.openstreetmap.org/' + z + '/' + x + '/' + y + '.png';
-      const r = (window.devicePixelRatio || 1) > 1.4 ? '@2x' : '';
-      const sub = 'abcd'[(x + y) % 4];
-      return 'https://' + sub + '.basemaps.cartocdn.com/' + (this.isDark() ? 'dark' : 'light') +
-        '_nolabels/' + z + '/' + x + '/' + y + r + '.png';
+      // CARTO 무료 타일이 2025년부터 API 키를 요구해서(워터마크 타일 반환) Esri 회색 베이스맵으로 교체 — 키 불필요, 라벨 없음, 라이트/다크 제공
+      return 'https://server.arcgisonline.com/ArcGIS/rest/services/Canvas/World_' + (this.isDark() ? 'Dark' : 'Light') +
+        '_Gray_Base/MapServer/tile/' + z + '/' + y + '/' + x;
     }
     setStyle(s) {
       if (s === this.style) return;
@@ -192,7 +191,7 @@ const MiniMap = (() => {
       this.drawMe(t, s, ox, oy);
     }
     drawTiles(c, s, ox, oy) {
-      const z = Math.max(0, Math.min(19, Math.round(this.z)));
+      const z = Math.max(0, Math.min(this.style === 'osm' ? 19 : 16, Math.round(this.z))); // Esri 회색 베이스맵은 16까지 — 그 위는 확대해서 그림
       const ts = TS * Math.pow(2, this.z - z);
       const x0 = Math.floor(ox / ts), x1 = Math.floor((ox + this.w) / ts);
       const y0 = Math.floor(oy / ts), y1 = Math.floor((oy + this.h) / ts);
