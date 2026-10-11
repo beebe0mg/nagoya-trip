@@ -44,7 +44,7 @@ const INFO = `
         <tr><td style="width:104px"><b>Day 1</b></td><td class="mono">약 ¥2,300 <span style="color:var(--muted); font-family:var(--f-sans)">공항→카나야마 ¥890 · 지하철 4번 · 산노 온천 메이테츠 왕복</span></td></tr>
         <tr><td><b>Day 2</b></td><td class="mono">¥420 <span style="color:var(--muted); font-family:var(--f-sans)">사카에⇄나고야역 왕복 · 버스는 결제 완료</span></td></tr>
         <tr><td><b>Day 3</b></td><td class="mono">¥630 <span style="color:var(--muted); font-family:var(--f-sans)">지하철 3번 · 이누야마 왕복은 킷푸 ¥1,630 별도</span></td></tr>
-        <tr><td><b>Day 4</b></td><td class="mono">¥0 <span style="color:var(--muted); font-family:var(--f-sans)">도니치에코킷푸 ¥620 (현금) 하루 무제한</span></td></tr>
+        <tr><td><b>Day 4</b></td><td class="mono">¥0 <span style="color:var(--muted); font-family:var(--f-sans)">도니치에코킷푸 ¥620 (현금) · 지하철 3번뿐, 나머지 도보</span></td></tr>
         <tr><td><b>Day 5</b></td><td class="mono">약 ¥890 <span style="color:var(--muted); font-family:var(--f-sans)">카나야마→공항 · 시내는 킷푸 ¥620 또는 마나카 ¥840</span></td></tr>
         <tr><td><b>합계</b></td><td class="mono"><b>약 ¥4,200~4,500</b> <span style="color:var(--muted); font-family:var(--f-sans)">모자라면 Day 4~5에 ¥1,000 한 번 충전</span></td></tr>
       </table>
@@ -75,8 +75,8 @@ const INFO = `
         </tr>
         <tr>
           <td><b style="color:var(--warn)">2위</b></td>
-          <td><b>Day 4</b><br><span class="mono">18:15→18:30</span></td>
-          <td><b>오아시스21 → 호라이켄 정리권.</b> 개찰 4분 + 보라선 대기 5분 + 승차 2분 + 도보 4분 = 15분. 여유가 사실상 0이고 한 대만 놓치면 저녁이 날아가.<br><span style="color:var(--ok)">→ 둘이 나누기. 한 명은 타워에서 바로 야바초로 가서 번호표부터 받기.</span></td>
+          <td><b>Day 4</b><br><span class="mono">18:10→18:25</span></td>
+          <td><b>오아시스21 → 호라이켄 정리권.</b> <s style="color:var(--muted)">지하철 15분(개찰+대기+승차+도보)</s> → <b>도보 12분으로 바꿔서 배차 변수를 없앴어.</b> 그래도 18:30 마감은 그대로라 18:10엔 나와야 해.<br><span style="color:var(--ok)">→ 불안하면 둘이 나누기. 한 명은 타워에서 바로 걸어가서 번호표부터 받기.</span></td>
         </tr>
         <tr>
           <td><b>—</b></td>
