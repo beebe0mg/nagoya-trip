@@ -19,10 +19,16 @@ const INFO = `
         <tr><td style="width:104px"><span class="chip c-yellow">노란선</span></td><td>사카에 → <b>나고야역</b> 5분 (<b>타카바타 방면</b>)</td></tr>
         <tr><td><span class="chip c-purple">보라선</span></td><td>야바초 · 카미마에즈(오스) · 카나야마 · 나고야조 — 전부 1~4정거장</td></tr>
         <tr><td><span class="chip c-red">공항</span></td><td>뮤스카이 → 카나야마 → 보라선 → 사카에 (40분)</td></tr>
-        <tr><td><span class="chip">💳 마나카</span></td><td>Day 1 공항 메이테츠역에서 1인 <b>¥2,000 + 충전 ¥3,000 (현금)</b>. 5일 교통 거의 다 이걸로 터치</td></tr>
-        <tr><td><span class="chip">🎫 종이표</span></td><td>뮤 티켓 ¥450 · 이누야마 킷푸 ¥1,950 (Day 3) · 도니치에코킷푸 ¥620 (Day 4·5)</td></tr>
+        <tr><td><span class="chip">💳 카드 터치</span></td><td>지하철 전 역 + 공항↔카나야마 메이테츠 = <b>컨택리스 카드 터치</b> (2026-09-03~). 교통카드(마나카) 안 삼. <b>1인 1카드</b>(하나·토스) 고정, 들어간 카드로 나오기</td></tr>
       </table>
       <p style="margin:14px 0 0; font-size:14px; color:var(--muted)">수족관 가는 名港線만 10분 간격 — 「名古屋港行」인지 확인하고 타기.</p>
+      <table class="tt" style="margin-top:14px">
+        <tr><td style="width:104px"><span class="chip">🎫 Day 1</span></td><td><b>뮤 티켓 ¥450/인</b> — 공항 메이테츠 창구 · 좌석 지정 (10:17 일반 특급이면 불필요)</td></tr>
+        <tr><td><span class="chip">🎫 Day 3</span></td><td><b>이누야마 성하마을 킷푸 ¥1,950/인</b> — 메이테츠 나고야역 서비스센터 창구 (CentX 앱 ¥1,840)</td></tr>
+        <tr><td><span class="chip">🎫 Day 4</span></td><td><b>도니치에코킷푸 ¥620/인</b> — 사카에역 발매기 현금 · 수족관 ¥200 할인</td></tr>
+        <tr><td><span class="chip">🎫 Day 5</span></td><td><b>뮤 티켓 ¥450/인</b> — 카나야마역 메이테츠 발매기·창구. 도니치에코킷푸 ¥620은 선택(¥220 이득)</td></tr>
+        <tr><td><span class="chip">🆘 비상</span></td><td>개찰에서 카드 거부되면 그 자리 창구에서 마나카 ¥2,000 (현금)</td></tr>
+      </table>
     </div>
   </div>
 
@@ -49,7 +55,7 @@ const INFO = `
     <div class="body">
       <div style="display:grid; gap:12px 32px; grid-template-columns:repeat(auto-fit,minmax(min(100%,280px),1fr))">
         <ul class="check">
-          <li><span class="bx"></span><span><b>환전 1인 ¥15,000 안팎 지폐</b> — 마나카·덴무스·온천은 현금만</span></li>
+          <li><span class="bx"></span><span><b>환전 1인 ¥15,000 안팎 지폐</b> — 덴무스·온천·종이표는 현금 (마나카 안 사니 ¥5,000은 비상용)</span></li>
           <li><span class="bx"></span><span>여권 (면세 때문에 여행 중에도 소지)</span></li>
           <li><span class="bx"></span><span>겉옷·목도리 — 시라카와고 아침 5도</span></li>
           <li><span class="bx"></span><span>보조배터리 · 온천용 속옷 여벌</span></li>
