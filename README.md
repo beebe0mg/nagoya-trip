@@ -4,7 +4,7 @@
 OpenStreetMap 기반 실지도 위에 하루 동선을 그리고, 지하철 노선·구글맵 길찾기·예외 상황(플랜 B)까지 한 페이지에 담은 모바일 우선 페이지.
 
 - `index.html` — 배포본 (단일 파일, 외부 라이브러리 0개)
-- `packing.html` — 짐 싸기 체크리스트 ([beebe0mg.github.io/nagoya-trip/packing.html](https://beebe0mg.github.io/nagoya-trip/packing.html) · 체크 상태는 각자 폰에만 저장)
+- `packing.html` — 짐 싸기 체크리스트 · 체크 상태는 각자 폰에만 저장)
 - `artifact.html` — 클로드 아티팩트용 (head/body 래퍼 없는 버전)
 - `src/` — 원본 조각 (template / style / engine / app), `data/` — 일정·좌표·OSM 벡터 데이터
 - `python3 build.py` 로 `index.html`·`artifact.html` 재생성
